@@ -1,0 +1,25 @@
+.slider-track {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.slider-track::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-item{
+    width: 100%;
+    flex-shrink: 0;
+    scroll-snap-type: mandatory;
+}
+.carousel-item img{
+    width: 100%;
+    min-height: 400px;
+    height: 80vh;
+}
+.slide-text {
+    color: #fff;
+    left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+}
