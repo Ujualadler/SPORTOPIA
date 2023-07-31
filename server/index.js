@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser")
 const userRouter =require("./routes/users.js");
 const turfRouter =require("./routes/turf.js");
 const adminRouter =require("./routes/admin.js");
-const paymentRouter =require("./routes/payment.js");
+const bookingRouter =require("./routes/booking.js");
 
 
 const app = express()
@@ -19,7 +19,7 @@ app.use(express.static("public"))
 app.use("/", userRouter)
 app.use("/turf",turfRouter)
 app.use("/admin",adminRouter)
-app.use("/booking",paymentRouter)
+app.use("/booking",bookingRouter)
 
 
 

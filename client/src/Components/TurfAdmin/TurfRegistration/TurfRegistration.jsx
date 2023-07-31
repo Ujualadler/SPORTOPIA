@@ -42,31 +42,35 @@ function TurfRegistration() {
     return validExtensions.includes(extension);
   }
 
-  
-const uploadLogo = (img) => {
-  const selectedImage = img.target.files[0];
+  const uploadLogo = (img) => {
+    const selectedImage = img.target.files[0];
 
-  if (selectedImage) {
-    if (!isValidImage(selectedImage.name)) {
-      toast.error("Add a valid logo image (jpg, jpeg, png, or webp).");
-      return;
+    if (selectedImage) {
+      if (!isValidImage(selectedImage.name)) {
+        toast.error("Add a valid logo image (jpg, jpeg, png, or webp).");
+        return;
+      }
+
+      let reader = new FileReader();
+      reader.readAsDataURL(selectedImage);
+      reader.onload = () => {
+        setPreview(reader.result);
+      };
+      reader.onerror = (error) => {
+        console.log("Error: ", error);
+      };
     }
-
-    let reader = new FileReader();
-    reader.readAsDataURL(selectedImage);
-    reader.onload = () => {
-      setPreview(reader.result);
-    };
-    reader.onerror = (error) => {
-      console.log("Error: ", error);
-    };
-  }
-};
+  };
 
   const uploadPhoto = (event) => {
     const files = event.target.files;
     console.log(files, "==");
     const results = [];
+
+    if (files.length !== 4) {
+      toast.error("Please upload exactly 4 images.");
+      return;
+    }
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -149,7 +153,7 @@ const uploadLogo = (img) => {
           pin,
           phone,
           photos,
-          preview
+          preview,
         },
         {
           headers: {

@@ -4,6 +4,8 @@ const adminModel = require("../models/adminSchema");
 const userModel = require("../models/userSchema");
 const turfModel = require("../models/turfSchema");
 
+// admin login details
+
 const adminLogin = async (req, res, next) => {
   try {
     let result = {
@@ -32,6 +34,8 @@ const adminLogin = async (req, res, next) => {
   }
 };
 
+// listing user on admin side
+
 const userList = async (req, res) => {
   try {
     const user = await userModel.find({});
@@ -40,6 +44,8 @@ const userList = async (req, res) => {
     res.json({ status: "failed", message: error.message });
   }
 };
+
+// blocking user
 
 const userBlock = async (req, res) => {
   try {
@@ -57,21 +63,28 @@ const userBlock = async (req, res) => {
   }
 };
 
+// listing turfs in admin side
+
 const turfList = async (req, res) => {
   try {
     const turf = await turfModel.find({});
-    res.json({ status: "success", result: turf});
+    res.json({ status: "success", result: turf });
   } catch (error) {
     res.json({ status: "failed", message: error.message });
   }
 };
+
+// blocking turfs
 
 const turfBlock = async (req, res) => {
   try {
     const id = req.query.id;
     let data = await turfModel.find({ _id: id });
     if (data[0].isTurfBlocked === true) {
-      await turfModel.updateOne({ _id: id }, { $set: { isTurfBlocked: false } });
+      await turfModel.updateOne(
+        { _id: id },
+        { $set: { isTurfBlocked: false } }
+      );
     } else {
       await turfModel.updateOne({ _id: id }, { $set: { isTurfBlocked: true } });
     }
@@ -82,11 +95,10 @@ const turfBlock = async (req, res) => {
   }
 };
 
-
 module.exports = {
   adminLogin,
   userList,
   userBlock,
   turfList,
-  turfBlock
+  turfBlock,
 };

@@ -1,6 +1,9 @@
 const jwt = require("jsonwebtoken");
 const authToken = require("../middleware/auth");
 const turfModel = require("../models/turfSchema");
+const bookingModel = require('../models/bookingSchema');
+
+// turf registration
 
 const turfRegistration = async (req, res) => {
   try {
@@ -37,7 +40,7 @@ const turfRegistration = async (req, res) => {
           pin,
           photos,
           admin,
-          logo:preview
+          logo: preview,
         })
         .then((res) => {
           console.log(res);
@@ -52,38 +55,61 @@ const turfRegistration = async (req, res) => {
   }
 };
 
+// getting turf details n user side
+
 const getTurfs = async (req, res) => {
   try {
-    const turfs = await turfModel.find({isTurfBlocked:false});
+    const turfs = await turfModel.find({ isTurfBlocked: false });
     res.json({ status: "success", result: turfs });
   } catch (error) {
     res.json({ status: "failed", message: error.message });
   }
 };
 
+// getting turfs details in turfadmin side
+
 const getTurfsAdmin = async (req, res) => {
   try {
     const admin = req.user._id;
     const turfs = await turfModel.find({ admin: admin });
-    res.json({ status: "success",result:turfs});
+    res.json({ status: "success", result: turfs });
   } catch (error) {
     res.json({ status: "failed", message: error.message });
   }
 };
 
+// findind individual turfs
+
 const getTurfDetail = async (req, res) => {
-  try {
-    const id = req.query.id;
-    const turfdata = await turfModel.findOne({ _id:id});
-    if (turfdata) {
-      res.status(200).json({ data: turfdata });
-    } else {
-      res.status(500).send({ error: "no turf" });
-    }
-  } catch (error) {
-    res.json({ status: "failed", message: error.message });
-  }
+	const currentDate = new Date();
+
+	try {
+		const id = req.query.id;
+
+		const turfData = await turfModel.findOne({ _id: id }).lean();
+
+		const turfBookings = await bookingModel
+			.find({
+				turf: id,
+				bookedDate: { $gte: currentDate },
+			})
+			.select("bookedSlots bookedDate")
+			.lean();
+		// append booked dates and slots to turfData
+		turfData.turfBookings = turfBookings;
+
+		if (turfData) {
+			res.status(200).json({ data: turfData });
+		} else {
+			res.status(500).send({ error: "no turf" });
+		}
+	} catch (error) {
+		res.json({ status: "failed", message: error.message });
+	}
 };
+
+
+// editing turf details
 
 const editTurf = async (req, res, next) => {
   const data = req.body;
@@ -121,5 +147,5 @@ module.exports = {
   getTurfs,
   getTurfsAdmin,
   getTurfDetail,
-  editTurf
+  editTurf,
 };

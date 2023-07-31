@@ -5,6 +5,8 @@ const turfModel = require("../models/turfAdminSchema");
 const usercontroller = require("../controller/userController");
 const turfAdminModel = require("../models/turfAdminSchema");
 
+// turf admin registration
+
 const signUp = async (req, res, next) => {
   try {
     let turfdetails = req.body;
@@ -25,13 +27,13 @@ const signUp = async (req, res, next) => {
           console.log(error);
         });
       let turfdetail = await turfModel.findOne({ email: turfdetails.email });
+      res.json({ status: true, result: turfdetails });
       usercontroller.sendVerifyMail(
         turfdetails.name,
         turfdetails.email,
         turfdetail._id,
         false
       );
-      res.json({ status: true, result: turfdetails });
     } else {
       return res.json({ error: "User already exists" });
     }
@@ -40,11 +42,13 @@ const signUp = async (req, res, next) => {
   }
 };
 
+// verifying turfAdmin
+
 const verifyTurf = async (req, res) => {
   try {
     let id = req.body.user_id;
 
-    const updateInfo = await turfModel.updateOne(
+    const updateInfo = await turfAdminModel.updateOne(
       { _id: id },
       { $set: { isVerified: 1 } }
     );
@@ -53,6 +57,8 @@ const verifyTurf = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+// turf admin login details
 
 const login = async (req, res, next) => {
   let turfSignUp = {
@@ -95,10 +101,10 @@ const login = async (req, res, next) => {
           turfSignUp.Status = false;
           res.json({ turfSignUp });
         }
-      }else{
+      } else {
         turfSignUp.message = "Verify your email first";
-      turfSignUp.Status = false;
-      res.json({ turfSignUp });
+        turfSignUp.Status = false;
+        res.json({ turfSignUp });
       }
     } else {
       turfSignUp.message = " Wrong Email";

@@ -23,6 +23,10 @@ import OtpLogin from "./Components/User/Login/OtpLogin";
 import TurfBookingPage from "./Pages/User/TurfBookingPage";
 import PaySuccess from "./Components/User/Checkout/PaySuccess";
 import PayFail from "./Components/User/Checkout/PayFail";
+import BookingHistoryPage from "./Pages/User/BookingHistoryPage";
+import TurfBookHistoryPage from "./Pages/TurfAdmin/TurfBookHistoryPage";
+import NotFound from "./Components/Error/NotFound";
+
 
 function App() {
   const userToken = useSelector((store) => store.User.Token);
@@ -33,6 +37,10 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          
+
+          {/* USER ROUTES */}
+
           <Route path="/" element={<HomePage/>}/>
           <Route path="/login" element={userToken?<HomePage/>:<Login/>}/>
           <Route path="/otpLogin" element={userToken?<OtpLogin/>:<OtpLogin/>}/>
@@ -44,7 +52,10 @@ function App() {
           <Route path="/booking/:id" element={<TurfBookingPage/>}/>
           <Route path="/paymentSuccess" element={<PaySuccess/>}/>
           <Route path="/paymentFail" element={<PayFail/>}/>
+          <Route path="/bookingHistory" element={<BookingHistoryPage/>}/>
+          <Route path="/bookingHistory" element={<BookingHistoryPage/>}/>
 
+          {/* TURF ADMIN ROUTES */}
 
           <Route path="/turf" element={<TurfAdminHome/>}/>
           <Route path="/turf/login" element={<TurfLoginPage/>}/>
@@ -53,13 +64,21 @@ function App() {
           <Route path="turf/registration" element={<TurfCreate/>} />         
           <Route path="turf/listing" element={<TurfsListing/>} />
           <Route path="turf/editTurf/:id" element={<TurfEditPage/>}/>
+          <Route path="turf/bookingHistory" element={<TurfBookHistoryPage/>}/>
 
+          {/* ADMIN ROUTES */}
 
           <Route path="/admin" element={<AdminLoginPage/>}/>
           <Route path="/admin/home" element={adminToken?<AdminHomePage/>:<AdminLoginPage/>}/>
           <Route path="/admin/viewUser" element={adminToken?<AdminUserList/>:<AdminLoginPage/>}/>
           <Route path="/admin/viewTurf" element={adminToken?<AdminTurfList/>:<AdminLoginPage/>}/>
 
+          {/* NOT FOUND */}
+
+          <Route to='*' element ={<NotFound/>}/>
+
+
+         
         </Routes>
       </BrowserRouter>
     </>

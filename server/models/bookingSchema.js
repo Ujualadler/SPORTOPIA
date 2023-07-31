@@ -5,6 +5,7 @@ const bookingSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true },
   bookedSlots: [{ type: String, required: true }],
   bookedDate: { type: Date, required: true },
+  turfAdmin:{ type: mongoose.Schema.Types.ObjectId, ref: "turfAdmin", required: true },
   totalAdvance: { type: Number, required: true },
   totalAmount: { type: Number, required: true },
 });

@@ -2,6 +2,10 @@ const Stripe = require("stripe");
 require("dotenv").config();
 const stripe = Stripe(process.env.STRIPE_KEY);
 const bookingModel = require("../models/bookingSchema");
+const turfModel = require("../models/turfSchema");
+const userModel = require("../models/userSchema");
+
+// checkout page loading
 
 const createCheckOut = async (req, res) => {
   try {
@@ -13,8 +17,6 @@ const createCheckOut = async (req, res) => {
       turf: turfId,
       bookedDate: date,
     });
-    console.log(existingBooking);
-    console.log(existingBooking.bookedSlots);
 
     if (existingBooking) {
       const bookedSlotsArray = existingBooking.map(
@@ -79,29 +81,70 @@ const createCheckOut = async (req, res) => {
   }
 };
 
+// sucess page loading
+
 const paymentSuccess = async (req, res) => {
   try {
-    console.log("first");
     const details = req.body;
-    console.log(details)
+    console.log(details);
+    const turf = await turfModel.findOne({ _id: details.turfId });
+
     if (details) {
       const booking = new bookingModel({
         user: req.user._id,
         turf: details.turfId,
+        turfAdmin: turf.admin,
         bookedDate: details.date,
         bookedSlots: details.selectedSlots,
         totalAdvance: details.advance,
         totalAmount: details.amount,
       });
       await booking.save();
-      res.json({status:true})
+      res.json({ status: true });
     }
   } catch (error) {
     res.status(500).json({ error: "Failed to save booking data" });
   }
 };
 
+// showing booking history in user side
+
+const bookingHistory = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    console.log(userId);
+    const history = await bookingModel
+      .find({ user: userId })
+      .sort({ _id: -1 })
+      .populate("user")
+      .populate("turf");
+    console.log(history);
+    res.json({ history });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to send bookingHistory" });
+  }
+};
+
+// showing booking history in turfadmin side
+
+const turfBookingHistory = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const history = await bookingModel
+      .find({ turfAdmin: userId })
+      .sort({ _id: -1 })
+      .populate("turf")
+      .populate("user");
+    console.log(history);
+    res.json({ history });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to send bookingHistory" });
+  }
+};
+
 module.exports = {
   createCheckOut,
   paymentSuccess,
+  bookingHistory,
+  turfBookingHistory,
 };

@@ -8,7 +8,7 @@ import { TurfLogout } from "../../../Redux/turfAuth";
 const navigation = [
   { name: "HOME", href: "/turf", current: false },
   { name: "VIEW TURFS", href: "/turf/listing", current: false },
-  { name: "BOOKING HISTORY", href: "/turf", current: false },
+  { name: "BOOKING HISTORY", href: "/turf/bookingHistory", current: false },
   //   { name: 'Calendar', href: '#', current: false },
 ];
 
@@ -47,8 +47,13 @@ export default function TurfNavbar() {
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="flex flex-shrink-0 items-center">
-                  <h1 className="text-white text-xl font-bold font-mono ml-8   ">TURF ADMIN</h1>
+                <div className="flex flex-shrink-0  items-center">
+                <h1 className="text-white text-xl font-bold font-mono  mr-1 ">SPORTOPIA</h1>
+                <img
+                    className="h-8 w-auto"
+                    src="/UserImages/sportopianextlogo.jpg"
+                    alt="Your Company"
+                  />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
@@ -117,13 +122,13 @@ export default function TurfNavbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                           >
-                            Booking History
+                            <Link to='/turf/bookingHistory'>Booking History</Link> 
                           </a>
                         )}
                       </Menu.Item>

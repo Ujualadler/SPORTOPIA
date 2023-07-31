@@ -45,7 +45,7 @@ function TurfHome() {
         </div>
       </div>
       <Carousal slides={slides} />
-      <div className="container md:flex justify-between md:m-8 xs:m-4 ">
+      <div className="container md:flex justify-between m-4 md:ml-24 md:mr-24 xs:m-4 ">
         <Cards reg={register} />
         <Cards reg={bookinglist} />
         <Cards reg={viewTurfs} />

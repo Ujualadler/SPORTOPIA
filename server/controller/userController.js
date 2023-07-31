@@ -6,6 +6,8 @@ const nodemailer = require("nodemailer");
 const { trusted } = require("mongoose");
 const auth = require("../middleware/auth");
 
+// user email sending
+
 const sendVerifyMail = async (name, email, user_id, check) => {
   try {
     console.log(user_id + "sdfghjkl;");
@@ -53,6 +55,8 @@ const sendVerifyMail = async (name, email, user_id, check) => {
   }
 };
 
+// verifying user email
+
 const verifyMail = async (req, res) => {
   try {
     let id = req.body.user_id;
@@ -66,6 +70,8 @@ const verifyMail = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+// user registration
 
 const signUp = async (req, res, next) => {
   try {
@@ -87,8 +93,13 @@ const signUp = async (req, res, next) => {
           console.log(error);
         });
       let userdetail = await userModel.findOne({ email: userdetails.email });
-      if(userdetail){
-      sendVerifyMail(userdetails.name, userdetails.email, userdetail._id, true);
+      if (userdetail) {
+        sendVerifyMail(
+          userdetails.name,
+          userdetails.email,
+          userdetail._id,
+          true
+        );
       }
       res.json({
         status: true,
@@ -102,6 +113,8 @@ const signUp = async (req, res, next) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// user login
 
 const login = async (req, res, next) => {
   let userSignUp = {
@@ -166,6 +179,8 @@ const login = async (req, res, next) => {
   }
 };
 
+// user otp login
+
 const otpLogin = async (req, res) => {
   try {
     const { phone } = req.body;
@@ -184,10 +199,12 @@ const otpLogin = async (req, res) => {
   }
 };
 
+// user google login
+
 const googlelogin = async (req, res, next) => {
   try {
     const payload = req.body;
-    console.log(payload.email)
+    console.log(payload.email);
     const user = await userModel.findOne({ email: payload.email });
     let userSignUp = {
       Status: false,
@@ -196,37 +213,36 @@ const googlelogin = async (req, res, next) => {
       name: null,
     };
     if (user) {
-      if (user.isVerified === 1){
-        console.log('hvokhgkhlhli');
+      if (user.isVerified === 1) {
+        console.log("hvokhgkhlhli");
         if (user.isBlocked === false) {
-        
           const token = authToken.generateAuthToken(user);
           userSignUp.message = "You are logged";
           userSignUp.Status = true;
           userSignUp.token = token;
           userSignUp.name = user.name;
           res.json({ userSignUp });
-        }else{
-          userSignUp.message='You are blocked by admin'
-        userSignUp.Status=false
-        res.json({ userSignUp});
-
+        } else {
+          userSignUp.message = "You are blocked by admin";
+          userSignUp.Status = false;
+          res.json({ userSignUp });
         }
-      }else{
-        userSignUp.message='Verify your email'
-        userSignUp.Status=false
-        res.json({ userSignUp});
+      } else {
+        userSignUp.message = "Verify your email";
+        userSignUp.Status = false;
+        res.json({ userSignUp });
       }
-    }else{
-      userSignUp.message='You need to register first'
-      userSignUp.Status=false
-    res.json({ userSignUp});
-
+    } else {
+      userSignUp.message = "You need to register first";
+      userSignUp.Status = false;
+      res.json({ userSignUp });
     }
   } catch (err) {
     res.status(500).json({ error: error.message });
   }
 };
+
+// showing profile user side
 
 const userProfile = async (req, res, next) => {
   try {
@@ -242,6 +258,8 @@ const userProfile = async (req, res, next) => {
   }
 };
 
+// getting user details
+
 const getUserDetail = async (req, res) => {
   try {
     const user = req.user;
@@ -251,10 +269,12 @@ const getUserDetail = async (req, res) => {
     } else {
       res.status(500).send({ error: "no user" });
     }
-  } catch (error) { 
+  } catch (error) {
     res.json({ status: "failed", message: error.message });
   }
 };
+
+// profile editing in user side
 
 const editProfile = async (req, res, next) => {
   const data = req.body;
