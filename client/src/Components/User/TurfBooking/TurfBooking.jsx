@@ -26,7 +26,7 @@ const TurfBooking = () => {
 
 	const [selectedImage, setSelectedImage] = useState(null);
 	const [data, setData] = useState("");
-	const [date, setDate] = useState("");
+	const [date, setDate] = useState(today);
 	const [timeSlots, setTimeSlots] = useState([]);
 	const [selectedSlots, setSelectedSlots] = useState([]);
 	const [selectedSlotDisplay, setSelectedSlotDisplay] = useState("");
