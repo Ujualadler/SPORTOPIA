@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import adminAxios from "../../../Axios/adminAxios";
-import { AdminLogin } from "../../../Redux/adminAuth.jsx";
+import AdminAxios from "../../../Axios/adminAxios";
+import { AdminLogin } from "../../../Redux/Slices/adminAuth.jsx";
 import { Toaster, toast } from "react-hot-toast";
 
 function AdminLoginPage() {
+  const adminAxios=AdminAxios()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

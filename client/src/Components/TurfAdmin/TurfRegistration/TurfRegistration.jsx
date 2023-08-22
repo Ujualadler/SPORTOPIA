@@ -1,10 +1,16 @@
 import React, { useRef, useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
-import turfAxios from "../../../Axios/turfAxios";
+import TurfAxios from "../../../Axios/turfAxios";
+import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 
+import mapboxSdk from "@mapbox/mapbox-sdk/services/geocoding";
+const geocodingService = mapboxSdk({ accessToken: "pk.eyJ1IjoidWp1YWwiLCJhIjoiY2xrdGFzN2V4MDg3MDNxcGNzanpvNm9zNiJ9.BcpaFJF6wn3SY2XJoRqDyA" });
+
 function TurfRegistration() {
+
+  const turfAxios=TurfAxios()
+
   const [turfName, setTurfName] = useState("");
   const [turfType, setType] = useState("");
   const [opening, setOpeining] = useState("");
@@ -22,7 +28,7 @@ function TurfRegistration() {
 
   const [currentSection, setCurrentSection] = useState(1);
   const navigate = useNavigate("");
-  const token = useSelector((state) => state.User.Token);
+  const token = useSelector((state) => state.Turf.Token);
 
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
@@ -96,6 +102,27 @@ function TurfRegistration() {
     }
   };
 
+  async function getCoordinatesFromAddress(address) {
+    try {
+      const response = await geocodingService
+        .forwardGeocode({
+          query: address,
+          limit: 1, // Set the limit to 1 to get only one result
+        })
+        .send();
+  
+      if (response && response.body && response.body.features) {
+        const [longitude, latitude] = response.body.features[0].center;
+        return { latitude, longitude };
+      } else {
+        throw new Error("Address not found");
+      }
+    } catch (error) {
+      throw new Error("Error geocoding address");
+    }
+  }
+  
+
   const submitTurf = async (e) => {
     e.preventDefault();
     const generateError = (err) =>
@@ -138,6 +165,11 @@ function TurfRegistration() {
     // }
 
     try {
+
+      const address = `${street}, ${city}, ${state}, ${pin}`;
+      
+      const coordinates = await getCoordinatesFromAddress(address);
+      console.log(coordinates+'')
       let response = await turfAxios.post(
         "/registration",
         {
@@ -154,13 +186,13 @@ function TurfRegistration() {
           phone,
           photos,
           preview,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          latitude: coordinates.latitude,
+          longitude: coordinates.longitude,
+
         }
       );
+      console.log(token._id)
+
       if (response.data.status === true) {
         navigate("/turf");
       } else {
@@ -174,10 +206,9 @@ function TurfRegistration() {
 
   return (
     <>
-      <div className="container-fluid flex justify-center items-center registration-wrapper">
-        <Toaster position="top-center" reverseOrder={false} />
-        <div className="flex form-holder">
-          <div className="flex h-auto flex-1 flex-col justify-center p-6 lg:px-8 bg-gray-300 border border-black form-item">
+      <div className="container-fluid flex justify-center items-center h-screen">
+        <div className="flex form-holder m-2 md:m-0">
+          <div className="flex h-auto flex-1 flex-col justify-center p-6 lg:px-8 bg-gray-900 bg-opacity-60 border border-black form-item">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
               <div className="flex justify-center ">
                 {preview && (
@@ -191,7 +222,7 @@ function TurfRegistration() {
               <div
                 onChange={handleImageChange}
                 onClick={() => logo.current.click()}
-                className="text-center text-lg font-bold leading-9 tracking-tight text-gray-800 hover:text-gray-600 cursor-pointer"
+                className="text-center text-lg font-bold leading-9 tracking-tight text-gray-100 hover:text-gray-600 cursor-pointer"
               >
                 <input onChange={uploadLogo} hidden ref={logo} type="file" />
                 UPLOAD A LOGO
@@ -210,7 +241,7 @@ function TurfRegistration() {
                     <div>
                       <label
                         htmlFor="turfname"
-                        className="block text-sm font-medium leading-6 text-gray-800"
+                        className="block text-sm font-medium leading-6 text-gray-200"
                       >
                         Turf name
                       </label>
@@ -233,7 +264,7 @@ function TurfRegistration() {
                         <div className="flex items-center justify-between">
                           <label
                             htmlFor="opening"
-                            className="block text-sm font-medium leading-6 text-gray-800"
+                            className="block text-sm font-medium leading-6 text-gray-200"
                           >
                             Opening time
                           </label>
@@ -256,7 +287,7 @@ function TurfRegistration() {
                         <div className="flex items-center justify-between">
                           <label
                             htmlFor="closing"
-                            className="block text-sm font-medium leading-6 text-gray-800"
+                            className="block text-sm font-medium leading-6 text-gray-200"
                           >
                             Closing time
                           </label>
@@ -281,7 +312,7 @@ function TurfRegistration() {
                       <div className="flex items-center justify-between">
                         <label
                           htmlFor="type"
-                          className="block text-sm font-medium leading-6 text-gray-800"
+                          className="block text-sm font-medium leading-6 text-gray-200"
                         >
                           Type
                         </label>
@@ -307,7 +338,7 @@ function TurfRegistration() {
                       <div className="flex items-center justify-between">
                         <label
                           htmlFor="phone"
-                          className="block text-sm font-medium leading-6 text-gray-800"
+                          className="block text-sm font-medium leading-6 text-gray-200"
                         >
                           Phone number
                         </label>
@@ -330,7 +361,7 @@ function TurfRegistration() {
                       <div className="flex items-center justify-between">
                         <label
                           htmlFor="street"
-                          className="block text-sm font-medium leading-6 text-gray-800"
+                          className="block text-sm font-medium leading-6 text-gray-200"
                         >
                           Street name
                         </label>
@@ -353,7 +384,7 @@ function TurfRegistration() {
                       <div className="flex items-center justify-between">
                         <label
                           htmlFor="city"
-                          className="block text-sm font-medium leading-6 text-gray-800"
+                          className="block text-sm font-medium leading-6 text-gray-200"
                         >
                           City
                         </label>
@@ -376,7 +407,7 @@ function TurfRegistration() {
                       <div className="flex items-center justify-between">
                         <label
                           htmlFor="state"
-                          className="block text-sm font-medium leading-6 text-gray-800"
+                          className="block text-sm font-medium leading-6 text-gray-200"
                         >
                           State
                         </label>
@@ -402,7 +433,7 @@ function TurfRegistration() {
                       <div className="flex items-center justify-between">
                         <label
                           htmlFor="pin"
-                          className="block text-sm font-medium leading-6 text-gray-800"
+                          className="block text-sm font-medium leading-6 text-gray-200"
                         >
                           PIN Code
                         </label>
@@ -426,7 +457,7 @@ function TurfRegistration() {
                         <div className="flex items-center justify-between">
                           <label
                             htmlFor="total"
-                            className="block text-sm font-medium leading-6 text-gray-800"
+                            className="block text-sm font-medium leading-6 text-gray-200"
                           >
                             Total amount
                           </label>
@@ -449,7 +480,7 @@ function TurfRegistration() {
                         <div className="flex items-center justify-between">
                           <label
                             htmlFor="advance"
-                            className="block text-sm font-medium leading-6 text-gray-800"
+                            className="block text-sm font-medium leading-6 text-gray-200"
                           >
                             Advance amount
                           </label>
@@ -472,7 +503,7 @@ function TurfRegistration() {
                     <div>
                       <label
                         htmlFor="file"
-                        className="block text-sm font-medium leading-6 text-gray-800"
+                        className="block text-sm font-medium leading-6 text-gray-200"
                       >
                         Upload images
                       </label>
@@ -505,7 +536,7 @@ function TurfRegistration() {
               <div className="form-footer flex justify-between relative mt-3">
                 {currentSection > 1 && (
                   <button
-                    className="form-ctl back absolute bottom-0 left-0 hover:bg-gray-500"
+                    className="form-ctl back absolute bg-black bottom-0 left-0 hover:bg-gray-500"
                     onClick={() =>
                       setCurrentSection((prevSection) => prevSection - 1)
                     }

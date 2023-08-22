@@ -1,34 +1,5 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
-const { OAuth2Client } = require("google-auth-library");
-
-const auth2client = new OAuth2Client(
-  process.env.CLIENT_ID,
-  process.env.CLIENT_SECRET
-);
-
-// const googleverify = async(req,res,next)=>{
-//     try{
-//         const token = req.header('Authorization')
-//         if(token){
-//             const ticket = await auth2client.verifyIdToken({
-//                 idToken:token,
-//                 audience:process.env.CLIENT_ID
-//             })
-//             req.user = ticket
-//             console.log(req.user.payload.email)
-//             next()
-//         }
-//         else{
-//             res.json({ success: false })
- 
-//         }
-//     }
-//     catch(err){
-//         res.json({success:false})
-//     }
-// }
-
 
 const verifyToken = async (req, res, next) => {
   let token = req.header("Authorization");
@@ -54,20 +25,17 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-
 const generateAuthToken = (user) => {
   const token = jwt.sign(
-    { _id: user._id,email: user.email},
+    { _id: user._id, email: user.email, role: "user" },
     process.env.SECRET_KEY
   );
   return token;
-}
-
-
+};
 
 const turfAdminToken = (data) => {
   const token = jwt.sign(
-    { _id: data._id, email: data.email, name: data.name },
+    { _id: data._id, email: data.email, name: data.name, role: "turfAdmin" },
     process.env.SECRET_KEY
   );
   return token;
@@ -76,7 +44,7 @@ const turfAdminToken = (data) => {
 const adminToken = (data) => {
   console.log(data, "token data");
   const token = jwt.sign(
-    { _id: data._id, email: data.email },
+    { _id: data._id, email: data.email, role: "admin" },
     process.env.SECRET_KEY
   );
   return token;
@@ -87,5 +55,4 @@ module.exports = {
   generateAuthToken,
   adminToken,
   turfAdminToken,
-  // googleverify
 };

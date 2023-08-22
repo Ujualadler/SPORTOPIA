@@ -1,17 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {useNavigate } from 'react-router-dom';
 import queryString from 'query-string';
-import bookingAxios from '../../../Axios/bookingAxios'
+import UserAxios from '../../../Axios/userAxios'
 import { useSelector } from 'react-redux';
 
 function PaySuccess() {
+
+  const userAxios=UserAxios()
+
   const navigate = useNavigate()
   const token = useSelector((state) => state.User.Token);
+  console.log(token)
   const isPaidRef = useRef(null)
 
 const sendData = (data) => {
   if(isPaidRef.current === null){
-    bookingAxios.post('/bookingSuccess',data,{headers: {
+    userAxios.post('/bookingSuccess',data,{headers: {
       Authorization: `Bearer ${token}`,
     }}).then((res)=>{
       console.log('first', isPaidRef)

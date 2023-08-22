@@ -50,8 +50,8 @@ const userList = async (req, res) => {
 const userBlock = async (req, res) => {
   try {
     const id = req.query.id;
-    let data = await userModel.find({ _id: id });
-    if (data[0].isBlocked === true) {
+    let data = await userModel.findOne({ _id: id });
+    if (data.isBlocked === true) {
       await userModel.updateOne({ _id: id }, { $set: { isBlocked: false } });
     } else {
       await userModel.updateOne({ _id: id }, { $set: { isBlocked: true } });

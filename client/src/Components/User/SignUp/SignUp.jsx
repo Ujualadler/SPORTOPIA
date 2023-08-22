@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import userAxios from "../../../Axios/userAxios";
-import { Toaster, toast } from "react-hot-toast";
+import UserAxios from "../../../Axios/userAxios";
+import {toast } from "react-toastify";
 
 export default function SignUp() {
+  const userAxios=UserAxios()
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -57,7 +58,6 @@ export default function SignUp() {
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 login-signup">
-        <Toaster position="top-center" reverseOrder={false} />
         <div className="bg-gray-800 rounded-2xl p-16">
           {" "}
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -80,7 +80,7 @@ export default function SignUp() {
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium leading-6 text-white"
+                  className="block text-sm font-medium leading-6 text-black"
                 >
                   Name
                 </label>
@@ -92,14 +92,14 @@ export default function SignUp() {
                     autoComplete="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-medium leading-6 text-white"
+                  className="block text-sm font-medium leading-6 text-black"
                 >
                   Contact number
                 </label>
@@ -111,14 +111,14 @@ export default function SignUp() {
                     autoComplete="phone"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-white"
+                  className="block text-sm font-medium leading-6 text-black"
                 >
                   Email address
                 </label>
@@ -130,7 +130,7 @@ export default function SignUp() {
                     autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -139,7 +139,7 @@ export default function SignUp() {
                 <div className="flex items-center justify-between">
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium leading-6 text-white"
+                    className="block text-sm font-medium leading-6 text-black"
                   >
                     Password
                   </label>

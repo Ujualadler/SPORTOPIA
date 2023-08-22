@@ -1,13 +1,14 @@
 import React from "react";
 import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import { decodeJwt, errors } from "jose";
-import userAxios from "../../../Axios/userAxios";
+import UserAxios from "../../../Axios/userAxios";
 import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { UserLogin } from "../../../Redux/userAuth";
+import { UserLogin } from "../../../Redux/Slices/userAuth";
 
 function Google() {
+  const userAxios=UserAxios()
   const generaterror = (err) => toast.error(err, { position: "top-center" });
   const navigate = useNavigate();
   const dispatch = useDispatch();

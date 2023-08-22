@@ -2,16 +2,18 @@ import React, { useEffect, useRef, useState } from 'react'
 import OtpInput from 'otp-input-react'
 import { CgSpinner } from 'react-icons/cg'
 import { BsFillShieldLockFill } from 'react-icons/bs'
-import userAxios from '../../../Axios/userAxios'
-import { Toaster, toast } from 'react-hot-toast'
+import UserAxios from '../../../Axios/userAxios'
+import { toast } from 'react-toastify';
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from '../../../Firebase/firebase.config';
 import { useDispatch } from 'react-redux'
-import { UserLogin } from "../../../Redux/userAuth";
+import { UserLogin } from "../../../Redux/Slices/userAuth";
 import { useNavigate } from 'react-router-dom'
 import { Toast } from 'flowbite-react'
 
 function OtpLogin() {
+
+  const userAxios=UserAxios()
 
   const regex_mobile = /^\d{10}$/
   const [clicked, setClicked] = useState(false)
@@ -113,10 +115,10 @@ function OtpLogin() {
   }, [seconds]);
 
   return (
-    <div style={{ 'height': '100vh' }} className='bg-gray-800 flex justify-center items-center'>
+    <div style={{ 'height': '100vh' }} className='bg-black flex justify-center items-center'>
       <div id='recaptcha-container'></div>
-      <div className=' bg-gray-900 p-5 rounded'>
-        <Toaster toastOptions={3000} /><div className='bg-white text-emarald-500 w-fit mx-auto p-4 rounded-full'>
+      <div className=' bg-black border border-white p-5 rounded'>
+        <div className='bg-white text-emarald-500 w-fit mx-auto p-4 rounded-full'>
           <BsFillShieldLockFill size={30} />
         </div>
         {showOTP ? <h1 className='text-white font-bold text-center mt-2'>Enter Your OTP</h1> : <h1 className='text-white font-bold text-center mt-2'>Enter Your Mobile</h1>}
@@ -138,7 +140,7 @@ function OtpLogin() {
          {showOTP&&<div className='flex justify-center'>
             <span className='text-center text-white'>{seconds}</span>
           </div>}
-          {!showOTP ? <button className='text-white mt-3 bg-gray-600 w-full flex gap-1 items-center justify-center py-2.5 rounded' onClick={checkMob}><span>Send Otp</span></button> : resend ? <button className='text-white mt-3 bg-green-800 w-full flex gap-1 items-center justify-center py-2.5 rounded' onClick={checkMob}>{clicked ? <CgSpinner size={20} className='animate-spin' /> : ''}<span>Resend Otp</span></button> : <button className='text-white mt-3 bg-green-800 w-full flex gap-1 items-center justify-center py-2.5 rounded' onClick={otpVerify}>{clicked ? <CgSpinner size={20} className='animate-spin' /> : ''}<span>Verify OTP</span></button>}
+          {!showOTP ? <button className='text-white mt-3 bg-gray-600 w-full flex gap-1 items-center justify-center py-2.5 rounded' onClick={checkMob}><span>Send Otp</span></button> : resend ? <button className='text-white mt-3 bg-gray-600 w-full flex gap-1 items-center justify-center py-2.5 rounded' onClick={checkMob}>{clicked ? <CgSpinner size={20} className='animate-spin' /> : ''}<span>Resend Otp</span></button> : <button className='text-white mt-3 bg-gray-800 w-full flex gap-1 items-center justify-center py-2.5 rounded' onClick={otpVerify}>{clicked ? <CgSpinner size={20} className='animate-spin' /> : ''}<span>Verify OTP</span></button>}
         </div>
 
       </div>

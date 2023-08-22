@@ -6,16 +6,14 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
 function AdminViewTurf() {
+  const adminAxios=Adminaxios()
+
   const token = useSelector((store) => store.Admin.Token);
   const [turfData, setTurfData] = useState([]);
   const [SearchInput, setSearchInput] = useState("");
 
   useEffect(() => {
-    Adminaxios.get("/turflist", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    adminAxios.get("/turflist")
       .then((response) => {
         console.log(response.data);
         setTurfData(response.data.result);
@@ -28,7 +26,7 @@ function AdminViewTurf() {
   const blockTurf = async (id) => {
     try {
       console.log(id);
-      const response = await Adminaxios.get(`/blockTurf?id=${id}`, {
+      const response = await adminAxios.get(`/blockTurf?id=${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -1,6 +1,12 @@
+.slider-holder {
+    position: relative;
+}
+
 .slider-track {
     overflow-x: auto;
     scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;	
+
 }
 
 .slider-track::-webkit-scrollbar {
@@ -10,12 +16,12 @@
 .carousel-item{
     width: 100%;
     flex-shrink: 0;
-    scroll-snap-type: mandatory;
+    scroll-snap-align: start;
 }
 .carousel-item img{
     width: 100%;
     min-height: 400px;
-    height: 80vh;
+    height: 100vh;
 }
 .slide-text {
     color: #fff;

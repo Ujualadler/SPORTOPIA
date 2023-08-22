@@ -5,14 +5,15 @@ const bookingModel = require("../models/bookingSchema");
 const turfModel = require("../models/turfSchema");
 const userModel = require("../models/userSchema");
 
-// checkout page loading
+// checkout page loading 
 
 const createCheckOut = async (req, res) => {
   try {
+    console.log("first")
     const { totalAmount, totalAdvance, turfId, data, date, selectedSlots } =
       req.body;
     const details = req.body;
-
+    console.log(details)
     const existingBooking = await bookingModel.find({
       turf: turfId,
       bookedDate: date,
@@ -88,7 +89,7 @@ const paymentSuccess = async (req, res) => {
     const details = req.body;
     console.log(details);
     const turf = await turfModel.findOne({ _id: details.turfId });
-
+    console.log(req.user._id)
     if (details) {
       const booking = new bookingModel({
         user: req.user._id,
@@ -133,9 +134,9 @@ const turfBookingHistory = async (req, res) => {
     const history = await bookingModel
       .find({ turfAdmin: userId })
       .sort({ _id: -1 })
+      .populate("user")
       .populate("turf")
-      .populate("user");
-    console.log(history);
+      console.log(history)
     res.json({ history });
   } catch (error) {
     res.status(500).json({ error: "Failed to send bookingHistory" });

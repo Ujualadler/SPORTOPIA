@@ -1,11 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
-import turfAxios from "../../../Axios/turfAxios";
+import TurfAxios from "../../../Axios/turfAxios";
 import { Toaster, toast } from "react-hot-toast";
-import { TurfLogin } from "../../../Redux/turfAuth";
+import { TurfLogin } from "../../../Redux/Slices/turfAuth";
 import { useState, react } from "react";
 import { useDispatch } from "react-redux";
 
 export default function TurfLoginPage() {
+
+  const turfAxios=TurfAxios()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();

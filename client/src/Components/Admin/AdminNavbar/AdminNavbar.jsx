@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { AdminLogout } from "../../../Redux/adminAuth";
+import { AdminLogout } from "../../../Redux/Slices/adminAuth";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

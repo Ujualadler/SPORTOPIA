@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import turfAxios from "../../../Axios/turfAxios";
+import TurfAxios from "../../../Axios/turfAxios";
 import { Toaster, toast } from "react-hot-toast";
 
 export default function TurfSignUp() {
+  const turfAxios=TurfAxios()
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");

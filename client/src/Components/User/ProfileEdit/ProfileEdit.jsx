@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import userAxios from "../../../Axios/userAxios";
+import UserAxios from "../../../Axios/userAxios";
 import toast, { Toaster } from 'react-hot-toast';
 
 const ProfileEdit = () => {
+
+  const userAxios=UserAxios()
+
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [contactNumber, setContactNumber] = useState("");
@@ -108,9 +111,9 @@ const ProfileEdit = () => {
         }}
       />
       <div className="border-b-2 block md:flex md:ml-12 md:mr-12">
-        <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 m-7 ml-1.5 border border-gray-400 bg-white shadow-2xl">
+        <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 m-7 ml-1.5 border border-gray-700 bg-gray-900 bg-opacity-60 shadow-2xl">
           <div className="flex justify-between">
-            <span className="text-xl font-semibold block">
+            <span className="text-xl text-white font-semibold block">
               EDIT YOUR PROFILE
             </span>
           </div>
@@ -118,7 +121,7 @@ const ProfileEdit = () => {
             <div className="flex-col">
               <img
                 id="showImage"
-                src={preview ? preview : image}
+                src={preview ? preview :image?image:'https://thumbs.dreamstime.com/z/female-user-icon-woman-avatar-dark-female-user-icon-woman-avatar-dark-simple-circle-illustration-149731622.jpg'}
                 className="max-w-xs md:w-48 md:h-48  h-32 w-32 border border-black rounded-full items-center"
                 alt=""
               />
@@ -128,14 +131,14 @@ const ProfileEdit = () => {
                   onClick={() => {
                     img.current.click();
                   }}
-                  className="rounded hover:rounded-lg bg-gray-700 w-[8.5rem] h-[2rem] hover:bg-slate-900 text-white"
+                  className="rounded hover:rounded-lg bg-black w-[8.5rem] h-[2rem] hover:bg-slate-900 text-white"
                 >
                   ADD PROFILE PIC
                 </button>
                 <input
                   className="hidden"
                   ref={img}
-                  accept="image/gif,image/webp"
+                  accept="image/gif,image/webp,image/png,image/jpg,image/jpeg"
                   onChange={uploadImage}
                   type="file"
                 />
@@ -144,12 +147,12 @@ const ProfileEdit = () => {
           </div>
         </div>
 
-        <div className="w-full md:w-3/5 p-8 border m-7 ml-1 border-gray-400 bg-white lg:ml-4 shadow-2xl">
+        <div className="w-full md:w-3/5 p-8 border m-7 ml-1 border-gray-700 bg-gray-900 bg-opacity-60 lg:ml-4 shadow-2xl">
           <div className="rounded shadow p-6">
             <div className="pb-6">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Name
               </label>
@@ -169,7 +172,7 @@ const ProfileEdit = () => {
             <div className="pb-6">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Contact Number
               </label>
@@ -189,7 +192,7 @@ const ProfileEdit = () => {
             <div className="pb-6">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Age
               </label>
@@ -209,7 +212,7 @@ const ProfileEdit = () => {
             <div className="pb-6">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Street
               </label>
@@ -229,7 +232,7 @@ const ProfileEdit = () => {
             <div className="pb-6">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 City
               </label>
@@ -249,7 +252,7 @@ const ProfileEdit = () => {
             <div className="pb-6">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 State
               </label>
@@ -269,7 +272,7 @@ const ProfileEdit = () => {
             <div className="pb-6">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 PIN(ZIP code)
               </label>
@@ -289,7 +292,7 @@ const ProfileEdit = () => {
             <div className="mt-5 text-center">
               <button
                 type="submit"
-                className="rounded hover:rounded-lg bg-gray-700 w-[8.5rem] h-[2rem] hover:bg-slate-900 text-white"
+                className="rounded hover:rounded-lg bg-black w-[8.5rem] h-[2rem] hover:bg-slate-900 text-white"
               >
                 UPDATE DETAILS
               </button>

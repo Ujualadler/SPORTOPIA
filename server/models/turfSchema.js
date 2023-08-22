@@ -63,6 +63,8 @@ const turfSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  latitude: { type: Number, required: true },
+  longitude: { type: Number, required: true },
 });
 
 const turfModel = mongoose.model("Turf", turfSchema);

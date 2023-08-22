@@ -76,6 +76,7 @@ const verifyMail = async (req, res) => {
 const signUp = async (req, res, next) => {
   try {
     let userdetails = req.body;
+    console.log(userdetails)
     const user = await userModel.find({ email: userdetails.email });
     if (user.length === 0) {
       userdetails.password = await bcrypt.hash(userdetails.password, 10);
@@ -142,27 +143,16 @@ const login = async (req, res, next) => {
             userSignUp.token = token;
             userSignUp.name = findUser.name;
 
-            const obj = {
-              token,
-              name,
-            };
-
-            res
-              .cookie("jwt", obj, {
-                httpOnly: false,
-                maxAge: 6000,
-              })
-              .status(200)
-              .send({ userSignUp });
+            res.json({ userSignUp,userData:findUser});
           } else {
             userSignUp.message = "Wrong Password";
             userSignUp.Status = false;
-            res.send({ userSignUp });
+            res.json({ userSignUp });
           }
         } else {
           userSignUp.message = "You are blocked by admin";
           userSignUp.Status = false;
-          res.json({ userSignUp });
+          res.json({ userSignUp});
         }
       } else {
         userSignUp.message = "Verify your email first";
@@ -301,6 +291,10 @@ const editProfile = async (req, res, next) => {
     res.json({ status: "failed", message: error.message });
   }
 };
+
+
+// add review of a turf
+
 
 module.exports = {
   signUp,

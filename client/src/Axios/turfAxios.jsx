@@ -1,7 +1,29 @@
+
 import axios from "axios";
+import { useSelector } from "react-redux";
 import { turfAPI } from "../Constants/Api";
 
-const turfInstance = axios.create({
+const createTurfInstance = () => {
+  const token = useSelector((state) => state.Turf.Token);
+
+  const turfInstance = axios.create({
     baseURL: turfAPI,
-});
-export default turfInstance;
+  });
+
+
+  turfInstance.interceptors.request.use(
+    (config) => {
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  return turfInstance;
+};
+
+export default createTurfInstance;

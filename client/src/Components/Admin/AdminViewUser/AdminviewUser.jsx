@@ -6,16 +6,15 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
 function AdminviewUser() {
+
+  const adminAxios=Adminaxios()
+  
   const token = useSelector((store) => store.Admin.Token);
   const [userData, setUserData] = useState([]);
   const [SearchInput, setSearchInput] = useState("");
 
   useEffect(() => {
-    Adminaxios.get("/userlist", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    adminAxios.get("/userlist")
       .then((response) => {
         console.log(response.data);
         setUserData(response.data.result);
@@ -28,11 +27,7 @@ function AdminviewUser() {
   const blockUser = async (id) => {
     try {
       console.log(id);
-      const response = await Adminaxios.get(`/blockUser?id=${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await adminAxios.get(`/blockUser?id=${id}`);
       Swal.fire({
         title:"Are you sure?",
         text:userData[0].isBlocked===true?"Do you want to unblock this user!":"Do you want to block this user!",
@@ -136,7 +131,7 @@ function AdminviewUser() {
                       <th key={obj._id} className="pl-9">
                         {index + 1}
                       </th>
-                      <td className="px-6 py-4">IMAGE</td>
+                      <td className="px-6 py-4"><img className="w-16" src={obj.image} alt="" /></td>
                       <td className="px-6 py-4">{obj.name}</td>
                       <td className="px-6 py-4">{obj.email}</td>
                       <td className="px-6 py-4">{obj.contactNumber}</td>

@@ -1,7 +1,7 @@
 const CustomCheckbox = ({ checked, onChange }) => {
     return (
       <div
-        className="cursor-pointer checkbox border rounded border-gray-400 w-6 h-6 flex items-center justify-center mr-2"
+        className="cursor-pointer checkbox border rounded border-blue-700 w-6 h-6 flex items-center justify-center mr-2"
         onClick={onChange}
       >
         {checked && (

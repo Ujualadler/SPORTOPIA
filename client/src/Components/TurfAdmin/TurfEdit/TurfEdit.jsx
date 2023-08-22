@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import turfAxios from "../../../Axios/turfAxios";
+import TurfAxios from "../../../Axios/turfAxios";
 import toast, { Toaster } from "react-hot-toast";
 
 const TurfEdit = () => {
-  const navigate = useNavigate();
   const [turfName, setTurfName] = useState("");
   const [phone, setPhone] = useState("");
   const [turfType, setTurfType] = useState("");
@@ -21,17 +19,15 @@ const TurfEdit = () => {
   const [advance, setAdvance] = useState("");
   const [total, setTotal] = useState("");
 
+  const turfAxios=TurfAxios()
+
   const img = useRef(null);
 
   const { id } = useParams();
 
-  const token = useSelector((state) => state.Turf.Token);
-
   useEffect(() => {
     turfAxios
-      .get(`/getTurfDetail?id=${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(`/getTurfDetail?id=${id}`)
       .then((response) => {
         const turfdata = response.data.data;
         setTurfName(turfdata.turfName);
@@ -120,6 +116,41 @@ const TurfEdit = () => {
   const handleUpdateTurf = async (e) => {
     e.preventDefault();
 
+    const generateError = (err) =>
+    toast.error(err, { position: "bottom-center" });
+
+
+    if (
+      !turfName.trim() ||
+      !turfType.trim() ||
+      !opening.trim() ||
+      !closing.trim() ||
+      !advance.toString().trim() ||
+      !total.toString().trim() ||
+      !street.trim() ||
+      !city.trim() ||
+      !state.trim() ||
+      !pin.toString().trim()
+    ) {
+      generateError("Please fill in all the fields");
+      return;
+    }
+
+    if (opening >= closing) {
+      generateError("Opening time should be less than closing time");
+      return;
+    }
+
+    if (advance <= 0 || total <= 0) {
+      generateError("Enter a valid amount");
+      return;
+    }
+
+    if (phone.length < 10) {
+      generateError("Enter valid phone number");
+      return;
+    }
+
     turfAxios
       .post(
         `/turfEdit?id=${id}`,
@@ -137,13 +168,7 @@ const TurfEdit = () => {
           total,
           turfType,
           photos
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+        })
       .then((res) => {
         if (res.data.status === "success") {
           successToast("Updated Successfully");
@@ -173,9 +198,9 @@ const TurfEdit = () => {
         }}
       />
       <div className="border-b-2 block md:flex md:ml-12 md:mr-12">
-        <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 m-7 ml-1.5 border border-gray-400 bg-white shadow-2xl">
+        <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 m-7 ml-1.5 border border-gray-700 bg-gray-900 bg-opacity-60 shadow-2xl">
           <div className="flex justify-between">
-            <span className="text-xl font-semibold block">
+            <span className="text-xl text-white font-semibold block">
               EDIT TURF DETAILS
             </span>
           </div>
@@ -193,24 +218,24 @@ const TurfEdit = () => {
                   onClick={() => {
                     img.current.click();
                   }}
-                  className="rounded hover:rounded-lg bg-gray-700 w-[8.5rem] h-[2rem] hover:bg-slate-900 text-white"
+                  className="rounded hover:rounded-lg bg-black w-[8.5rem] h-[2rem] hover:bg-slate-900 text-white"
                 >
                   ADD LOGO
                 </button>
                 <input
                   className="hidden"
                   ref={img}
-                  accept="image/gif,image/webp"
+                  accept="image/gif,image/webp,image/png,image/jpeg,image/jpg"
                   onChange={uploadLogo}
                   type="file"
                 />
               </div>
             </div>
           </div>
-          <h3 className="w-full font-semibold m-2">TURF IMAGES</h3>
-          <div className="flex flex-wrap border border-gray-400 pb-2 shadow-2xl">
+          <h3 className="w-full font-semibold m-2 text-white">TURF IMAGES</h3>
+          <div className="flex flex-wrap bg-gray-950   shadow-2xl">
             {photos.map((pic, index) => (
-              <div key={index} className="m-2 md:ml-4 ">
+              <div key={index} className="m-2 md:ml-3 ">
                 <input
                   ref={(el) => (fileInputRefs[index] = el)}
                   type="file"
@@ -221,7 +246,7 @@ const TurfEdit = () => {
                   onClick={() => {
                     fileInputRefs[index].click();
                   }}
-                  className="w-40 h-36 md:w-44 hover:bg-opacity-75 transition-all duration-300 md:h-40 rounded-md"
+                  className="w-[9.5rem] h-36 md:w-52 hover:bg-opacity-75 transition-all duration-300 md:h-40 rounded-md"
                   src={photoPreviews[index] || pic}
                   alt=""
                 />
@@ -230,21 +255,21 @@ const TurfEdit = () => {
           </div>
         </div>
 
-        <div className="w-full md:w-3/5 p-8 border m-7 ml-1 border-gray-400 bg-white lg:ml-4 shadow-2xl">
+        <div className="w-full md:w-3/5 p-8 border m-7 ml-1 border-gray-700 bg-gray-900 bg-opacity-60 lg:ml-4 shadow-2xl">
           <div className="rounded shadow p-6">
             <div className="pb-2">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Name
               </label>
               <div className="flex">
                 <input
                   id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
+                  className="border border-gray-700 rounded-r px-4 py-2 w-full"
                   type="text"
-                  value={turfName ? turfName : ""}
+                  value={turfName?turfName : ""}
                   placeholder="Enter turf name"
                   onChange={(e) => {
                     setTurfName(e.target.value);
@@ -255,14 +280,14 @@ const TurfEdit = () => {
             <div className="pb-2">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Type
               </label>
               <div className="flex">
                 <input
                   id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
+                  className="border border-gray-700 rounded-r px-4 py-2 w-full"
                   type="text"
                   value={turfType ? turfType : ""}
                   placeholder="Enter turf type"
@@ -275,16 +300,16 @@ const TurfEdit = () => {
             <div className="pb-2">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Phone number
               </label>
               <div className="flex">
                 <input
                   id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
+                  className="border border-gray-700 rounded-r px-4 py-2 w-full"
                   type="number"
-                  value={phone ? phone : ""}
+                  defaultValue={phone ? phone : ""}
                   placeholder="Enter phone number"
                   onChange={(e) => {
                     setPhone(e.target.value);
@@ -295,16 +320,16 @@ const TurfEdit = () => {
             <div className="pb-2">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Opening time
               </label>
               <div className="flex">
                 <input
                   id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
+                  className="border border-gray-700 rounded-r px-4 py-2 w-full"
                   type="time"
-                  value={opening ? opening : ""}
+                  defaultValue={opening ? opening : ""}
                   placeholder="Enter opening time"
                   onChange={(e) => {
                     setOpening(e.target.value);
@@ -315,16 +340,16 @@ const TurfEdit = () => {
             <div className="pb-2">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Closing time
               </label>
               <div className="flex">
                 <input
                   id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
+                  className="border border-gray-700 rounded-r px-4 py-2 w-full"
                   type="time"
-                  value={closing ? closing : ""}
+                  defaultValue={closing ? closing : ""}
                   placeholder="Enter closing time"
                   onChange={(e) => {
                     setClosing(e.target.value);
@@ -335,16 +360,16 @@ const TurfEdit = () => {
             <div className="pb-2">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Advance Amount
               </label>
               <div className="flex">
                 <input
                   id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
+                  className="border border-gray-700 rounded-r px-4 py-2 w-full"
                   type="number"
-                  value={advance ? advance : ""}
+                  defaultValue={advance ? advance : ""}
                   placeholder="Enter advance"
                   onChange={(e) => {
                     setAdvance(e.target.value);
@@ -355,16 +380,16 @@ const TurfEdit = () => {
             <div className="pb-2">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Total Amount
               </label>
               <div className="flex">
                 <input
                   id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
+                  className="border border-gray-700 rounded-r px-4 py-2 w-full"
                   type="number"
-                  value={total ? total : ""}
+                  defaultValue={total ? total : ""}
                   placeholder="Enter age"
                   onChange={(e) => {
                     setAdvance(e.target.value);
@@ -375,14 +400,14 @@ const TurfEdit = () => {
             <div className="pb-2">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 Street
               </label>
               <div className="flex">
                 <input
                   id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
+                  className="border border-gray-700 rounded-r px-4 py-2 w-full"
                   type="text"
                   value={street ? street : ""}
                   placeholder="Enter street name"
@@ -395,14 +420,14 @@ const TurfEdit = () => {
             <div className="pb-2">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 City
               </label>
               <div className="flex">
                 <input
                   id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
+                  className="border border-gray-700 rounded-r px-4 py-2 w-full"
                   type="text"
                   value={city ? city : ""}
                   placeholder="Enter city name"
@@ -415,14 +440,14 @@ const TurfEdit = () => {
             <div className="pb-2">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 State
               </label>
               <div className="flex">
                 <input
                   id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
+                  className="border border-gray-700 rounded-r px-4 py-2 w-full"
                   type="text"
                   value={state ? state : ""}
                   placeholder="Enter state name"
@@ -435,14 +460,14 @@ const TurfEdit = () => {
             <div className="pb-2">
               <label
                 htmlFor="name"
-                className="font-semibold text-gray-700 block pb-1"
+                className="font-semibold text-gray-200 block pb-1"
               >
                 PIN(ZIP code)
               </label>
               <div className="flex">
                 <input
                   id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
+                  className="border border-gray-700 rounded-r px-4 py-2 w-full"
                   type="number"
                   placeholder="Enter PIN code"
                   value={pin ? pin : ""}
@@ -455,7 +480,7 @@ const TurfEdit = () => {
             <div className="mt-5 text-center">
               <button
                 type="submit"
-                className="rounded hover:rounded-lg bg-gray-700 w-[8.5rem] h-[2rem] hover:bg-slate-900 text-white"
+                className="rounded hover:rounded-lg bg-black w-[8.5rem] h-[2rem] hover:bg-slate-900 text-white"
               >
                 UPDATE DETAILS
               </button>

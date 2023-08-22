@@ -3,7 +3,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { TurfLogout } from "../../../Redux/turfAuth";
+import { TurfLogout } from "../../../Redux/Slices/turfAuth";
 
 const navigation = [
   { name: "HOME", href: "/turf", current: false },
@@ -29,11 +29,11 @@ export default function TurfNavbar() {
   return (
     <Disclosure
       as="nav"
-      className="bg-black ml-4 mr-4 border-2 border-white mt-6"
+      className="bg-black ml-1 mr-1 border-2 border-white mt-1"
     >
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 ">
+          <div className="mx-auto max-w-7xl   ">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
@@ -48,7 +48,7 @@ export default function TurfNavbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0  items-center">
-                <h1 className="text-white text-xl font-bold font-mono  mr-1 ">SPORTOPIA</h1>
+                {/* <h1 className="text-white text-xl font-bold font-mono  mr-1 ">SPORTOPIA</h1> */}
                 <img
                     className="h-8 w-auto"
                     src="/UserImages/sportopianextlogo.jpg"
@@ -60,7 +60,7 @@ export default function TurfNavbar() {
                     {navigation.map((item) => (
                       <a
                         key={item.name}
-                        href={item.href}
+                        onClick={()=>navigate(item.href)}
                         className={classNames(
                           item.current
                             ? "bg-gray-900 text-white"
@@ -174,7 +174,7 @@ export default function TurfNavbar() {
                 <Disclosure.Button
                   key={item.name}
                   as="a"
-                  href={item.href}
+                  onClick={()=>navigate(item.href)}
                   className={classNames(
                     item.current
                       ? "bg-gray-900 text-white"

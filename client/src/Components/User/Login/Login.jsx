@@ -1,19 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
-import userAxios from "../../../Axios/userAxios";
-import { Toaster, toast } from "react-hot-toast";
-import { UserLogin } from "../../../Redux/userAuth";
+import UserAxios from "../../../Axios/userAxios";
+import { toast } from "react-toastify";
+import { GetUserData, UserLogin } from "../../../Redux/Slices/userAuth";
 import { useState, react } from "react";
 import { useDispatch } from "react-redux";
 import Google from "./Google";
 
 export default function Login() {
+  const userAxios = UserAxios();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const generateError = (err) => {
-    toast.error(err, { position: "bottom-center" });
+    toast.error(err);
   };
 
   const LoginSubmit = async (e) => {
@@ -35,11 +36,14 @@ export default function Login() {
     try {
       const response = await userAxios.post("/login", { email, password });
       const result = response.data.userSignUp;
-      console.log(result);
-      console.log("first");
+      const userDetails = response.data.userData;
+
       if (result.Status === true) {
         const token = result.token;
+        const UserData = userDetails;
+        console.log(UserData)
         dispatch(UserLogin({ token: token }));
+        dispatch(GetUserData({ userData: UserData }));
         navigate("/");
       } else {
         generateError(result.message);
@@ -52,111 +56,79 @@ export default function Login() {
 
   return (
     <>
-      <div className="flex h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 login-signup">
-        <Toaster position="bottom-center" reverseOrder={false} />
-        <div className="bg-slate-900 rounded-lg space-y-9 ">
-          <div className="bg-slate-800 m-5 rounded-2xl border border-black">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-              <img
-                className="mx-auto h-10 w-auto mt-2"
-                src="/UserImages/sportopianextlogo.jpg"
-                alt="Your Company"
-              />
-              <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
-                LOG IN TO YOUR ACCOUNT
-              </h2>
-            </div>
-
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-              <form
-                className="space-y-6"
-                action="#"
-                method="POST"
-                onSubmit={LoginSubmit}
-              >
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium leading-6 text-white"
-                  >
-                    Email address
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
+      <div className="bg-black h-screen ">
+        <div className="py-36 md:py-11">
+          <form className="" onSubmit={LoginSubmit}>
+            <div className="flex md:bg-none  md:bg-opacity-25 bg-cover bg-center bg-[url('https://wallpaperaccess.com/full/1768022.jpg')] md:border border-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
+              <div
+                className="hidden md:block lg:w-1/2 bg-cover"
+                style={{
+                  backgroundImage:
+                    "url(https://wallpaperaccess.com/full/1767907.jpg)",
+                }}
+              ></div>
+              <div className="w-full p-8 lg:w-1/2">
+                <h2 className="text-2xl font-semibold flex justify-center items-center  text-gray-700 text-center">
+                  <img
+                    className="w-24"
+                    src="/UserImages/sportopianextlogo.jpg"
+                    alt=""
+                  />
+                </h2>
+                <p className="text-xl text-gray-100 text-center">
+                  Welcome back!
+                </p>
+                <div className="mb-5">
+                  <Google />
                 </div>
-
-                <div>
-                  <div className="flex items-center justify-between">
-                    <label
-                      htmlFor="password"
-                      className="block text-sm font-medium leading-6 text-white"
-                    >
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="border-b w-1/5 lg:w-1/4"></span>
+                  <a className="text-xs text-center text-gray-200 uppercase">
+                    {" "}
+                    <Link to="/otpLogin">or Login with OTP</Link>
+                  </a>
+                  <span className="border-b w-1/5 lg:w-1/4"></span>
+                </div>
+                <div className="mt-4">
+                  <label className="block text-gray-200 text-sm font-bold mb-2">
+                    Email Address
+                  </label>
+                  <input
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
+                    type="email"
+                  />
+                </div>
+                <div className="mt-4">
+                  <div className="flex justify-between">
+                    <label className="block text-gray-200 text-sm font-bold mb-2">
                       Password
                     </label>
-                    {/* <div className="text-sm">
-                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
-                    </a>
-                  </div> */}
                   </div>
-                  <div className="mt-2">
-                    <input
-                      id="password"
-                      name="password"
-                      type="password"
-                      autoComplete="current-password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
+                  <input
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
+                    type="password"
+                  />
                 </div>
-                <Google />
-                <div>
+                <div className="mt-8">
                   <button
                     type="submit"
-                    className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-3"
+                    className="bg-black text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
                   >
-                    LOGIN
+                    Login
                   </button>
                 </div>
-              </form>
-              <div className="flex justify-center"></div>
-
-              <p className="mt-3 mb-2 text-center text-sm text-gray-200">
-                Not a member?{" "}
-                <a
-                  href="#"
-                  className="font-semibold leading-6 text-gray-400 hover:text-indigo-500"
-                > 
-                  <Link to="/signup">Register here</Link>
-                </a>
-              </p>
-              <p className="mt-3 mb-2 text-center text-sm text-gray-200">
-                Try otp login?{" "}
-                <a
-                  href="#"
-                  className="font-semibold leading-6 text-gray-400 hover:text-indigo-500"
-                > 
-                  
-                  <Link to="/otpLogin">Click here</Link>
-                  
-
-                </a>
-              </p>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="border-b w-1/5 md:w-1/4"></span>
+                  <a href="#" className="text-xs text-gray-500 uppercase">
+                    <Link to="/signup">Register here</Link>
+                  </a>
+                  <span className="border-b w-1/5 md:w-1/4"></span>
+                </div>
+              </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </>

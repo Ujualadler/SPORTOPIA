@@ -3,13 +3,14 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { UserLogout } from "../../../Redux/userAuth";
+import { UserLogout } from "../../../Redux/Slices/userAuth";
 
 const navigation = [
   { name: "HOME", href: "/", current: false },
   { name: "BOOKING", href: "/getTurfs", current: false },
-  { name: "CLUBS", href: "/", current: false },
-  //   { name: 'Calendar', href: '#', current: false },
+  { name: "CLUBS", href: "/clubs", current: false },
+    { name: 'YOUR CLUBS', href: '/yourClubs', current: false },
+    { name: 'CREATED CLUBS', href: '/clubsCreated', current: false },
 ];
 
 function classNames(...classes) {
@@ -19,8 +20,10 @@ function classNames(...classes) {
 export default function Navbar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const user = useSelector((state) => state.User.Token);
+  console.log(user)
+  const userData=useSelector((state)=>state.User.UserData)
+  console.log(userData+'hai')
 
   const logout = () => {
     dispatch(UserLogout());
@@ -36,11 +39,11 @@ export default function Navbar() {
       {({ open }) => (
         <>
           <div>
-            <div className="mx-auto max-w-full ml-5 mr-5 sm:px-6 lg:px-8 border-2 border-black mt-4">
+            <div className="mx-auto max-w-full bg-black  mr-1 ml-1 lg:px-8 border-2 border-black mt-1">
               <div className="relative flex h-16 items-center justify-between">
                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                   {/* Mobile menu button*/}
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-black hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-gray-700 hover:text-white focus:outline-none    ">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
                       <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -62,13 +65,13 @@ export default function Navbar() {
                       {navigation.map((item) => (
                         <a
                           key={item.name}
-                          onClick={(e) => {
+                          onClick={() => {
                             navigate(item.href);
                           }}
                           className={classNames(
                             item.current
                               ? "bg-gray-900 text-white"
-                              : "text-black hover:bg-gray-700 hover:text-white",
+                              : "text-white hover:bg-gray-700 hover:text-white cursor-pointer",
                             "rounded-md px-3 py-2 text-sm font-medium"
                           )}
                           aria-current={item.current ? "page" : undefined}
@@ -82,7 +85,7 @@ export default function Navbar() {
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   <button
                     type="button"
-                    className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    className="rounded-full bg-gray-700 p-1 text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-400"
                   >
                     <span className="sr-only">View notifications</span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -91,11 +94,11 @@ export default function Navbar() {
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
                     <div>
-                      <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <Menu.Button className="flex rounded-full bg-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          src={userData?userData.image:"https://cdn-icons-png.flaticon.com/512/552/552721.png"}
                           alt=""
                         />
                       </Menu.Button>
@@ -178,11 +181,11 @@ export default function Navbar() {
                 <Disclosure.Button
                   key={item.name}
                   as="a"
-                  href={item.href}
+                  onClick={()=>navigate(item.href)}
                   className={classNames(
                     item.current
                       ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      : "text-gray-800 hover:bg-gray-700 hover:text-white",
                     "block rounded-md px-3 py-2 text-base font-medium"
                   )}
                   aria-current={item.current ? "page" : undefined}

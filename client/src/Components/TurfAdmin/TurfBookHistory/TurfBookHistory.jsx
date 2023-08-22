@@ -1,26 +1,23 @@
 import React from "react";
 import { useEffect,useState } from "react";
-import bookingAxios from "../../../Axios/bookingAxios";
+import TurfAxios from "../../../Axios/turfAxios";
 import { useSelector } from "react-redux";
 
 
 const TurfBookhistory = () => {
-const[details,setDetails]=useState()
-const token = useSelector((state) => state.Turf.Token);
+
+const turfAxios=TurfAxios()
+
+const[ details,setDetails ]=useState()
+
 
 
     useEffect(()=>{
-        bookingAxios.get('/TurfBookingHistory',   {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }).then((response)=>{
+        turfAxios.get('/TurfBookingHistory').then((response)=>{
             console.log(response.data.history) 
             const data=response.data.history
             setDetails(data)
           })
-
-
     },[])
 
     return (
