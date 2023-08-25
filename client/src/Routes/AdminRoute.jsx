@@ -6,10 +6,11 @@ import AdminLoginPage from "../Components/Admin/AdminLogin/AdminLoginPage";
 import AdminHomePage from "../Pages/Admin/AdminHomePage";
 import AdminUserList from "../Pages/Admin/AdminUserList";
 import AdminTurfList from "../Pages/Admin/AdminTurfList";
+import BannerPage from '../Pages/Admin/BannerPage';
 
 function AdminRoute() {
-  const AdminToken = useSelector((store) => store.Turf.Token);
-
+  const AdminToken = useSelector((store) => store.Admin.Token);
+  
   return (
     <>
     <Routes> 
@@ -17,6 +18,7 @@ function AdminRoute() {
           <Route path="/home" element={AdminToken?<AdminHomePage/>:<AdminLoginPage/>}/>
           <Route path="/viewUser" element={AdminToken?<AdminUserList/>:<AdminLoginPage/>}/>
           <Route path="/viewTurf" element={AdminToken?<AdminTurfList/>:<AdminLoginPage/>}/>
+          <Route path="/banner" element={AdminToken?<BannerPage/>:<AdminLoginPage/>}/>
     </Routes>
 
     </>

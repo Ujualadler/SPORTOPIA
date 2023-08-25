@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import moment from "moment-timezone";
@@ -10,6 +10,7 @@ import { io } from "socket.io-client";
 import {
  faCaretDown
 } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
 
 const TurfBooking = () => {
   const userAxios = UserAxios();
@@ -19,6 +20,8 @@ const TurfBooking = () => {
 
   const [showDetails, setShowDetails] = useState(false);
   const [showSlots, setShowSlots] = useState(false);
+
+  const [onBooking, setOnBooking] = useState([])
 
   const toggleDetails = () => {
     setShowDetails((prevShowDetails) => !prevShowDetails);
@@ -43,6 +46,8 @@ const TurfBooking = () => {
   const [reviewData, setReviewData] = useState('');
 
   const [socket, setSocket] = useState(null)
+
+  const userId=useSelector((state)=>state.User.UserData._id)
 
   useEffect(() => {
     userAxios
@@ -131,12 +136,22 @@ const TurfBooking = () => {
     setTotalAdvance(totalAdvanceAmount);
     setTotalAmount(totalAmount);
   }, [data.advance, selectedSlots, totalAmount]);
-
+ const activate=useRef(false)
+ 
   const handleSelectSlot = (slot) => {
     if (selectedSlots.includes(slot)) {
       setSelectedSlots((prevSlots) => prevSlots.filter((s) => s !== slot));
+      
+      socket.emit('removeBooking', id, date, slot, userId)
+      clearTimeout(activate.current) 
     } else {
       setSelectedSlots((prevSlots) => [...prevSlots, slot]);
+      activate.current = setTimeout(()=>{
+        setSelectedSlots((prevSlots) => prevSlots.filter((s) => s !== slot));
+        toast.error('Slot deactivated due to exceeded time.')
+        socket.emit('removeBooking', id, date, slot, userId)
+      }, 60000)
+      socket.emit('updateBooking', id, date, slot, userId)
     }
   };
 
@@ -199,12 +214,14 @@ const TurfBooking = () => {
 
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3000/bookingIo");
+    const newSocket = io("http://localhost:3000/booking");
     if (newSocket) console.log('connected first')
     setSocket(newSocket);
 
     return () => {
-      if (newSocket) newSocket.disconnect();
+      if (newSocket) newSocket.disconnect(()=>{
+      socket.emit('removeBooking', id, date, slot, userId)
+      });
     };
   }, [id]);
 
@@ -212,11 +229,10 @@ const TurfBooking = () => {
     if (socket) {
       socket.emit("joinBooking", id);
 
-      socket.emit('updateBooking', id)
-
-      socket.on("message", (receivedClubId) => {
+      socket.on("message", (receivedClubId, onBooking) => {
         if (receivedClubId === id) {
-          console.log('oook')
+          console.log('==================',onBooking)
+          setOnBooking([onBooking])
         }
       });
       socket.on("error", (err) => {
@@ -237,6 +253,7 @@ const TurfBooking = () => {
 
   return (
     <section className="overflow-hidden  font-poppins   m-1 ">
+      {console.log(onBooking, '-------------------------------')}
       <div className="  ml-3 mr-3 mt-7 ">
 		<Toaster></Toaster>
         <div className="flex justify-between  ">
@@ -292,7 +309,7 @@ const TurfBooking = () => {
                 {data
                   ? data.photos.map((img) => {
                       return (
-                        <div className="p-2 w-3/12 ">
+                        <div className="p-2 w-3/12 " key={img._id}>
                           <a
                             onClick={() => setSelectedImage(img)}
                             className="block border border-transparent dark:border-transparent dark:hover:border-red-300 hover:border-red-300"
@@ -449,7 +466,19 @@ const TurfBooking = () => {
                             )
                         );
 
+                        let onBookingSlot = false;
+                        onBooking.forEach((bookingObj) => {
+                          if (bookingObj && bookingObj[date]) {
+                            bookingObj[date].forEach(item => {
+                              if(item.slot == `${slot.start}-${slot.end}` && item.user != userId)
+                                onBookingSlot = true;
+                            })
+                          }
+                        });
+
                         const isSlotBooked = bookedSlot !== undefined;
+
+                        console.log(onBookingSlot, 'onBooking ------------')
                         return (
                           <div
                             key={index}
@@ -458,6 +487,7 @@ const TurfBooking = () => {
                             }`}
                           >
                             <CustomCheckbox
+                              disabled={onBookingSlot}
                               checked={selectedSlots.includes(
                                 `${slot.start}-${slot.end}`
                               )}
@@ -476,7 +506,7 @@ const TurfBooking = () => {
                     </div>
                   )}
                 </div>
-                <div className="">
+                {selectedSlots.length? <div className="">
                   <div className=" mt-4 mb-8 text-lg font-bold font-poppins text-gray-100 ">
                     <span className="mr-5">SELECTED SLOTS</span>
                     <div className="mr-5 text-gray-300">
@@ -491,7 +521,8 @@ const TurfBooking = () => {
                     <span className="mr-3">TOTAL AMOUNT</span>
                     <span>₹{totalAmount}</span>
                   </div>
-                </div>
+                </div>:''}
+               
               </div>
               <div className="w-32 mb-8"></div>
               <div className="flex flex-wrap items-center -mx-4">

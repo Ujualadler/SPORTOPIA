@@ -15,13 +15,32 @@ const verifyToken = async (req, res, next) => {
     }
     const verified = jwt.verify(token, process.env.SECRET_KEY);
     req.user = verified;
-    console.log(req.user._id);
+    console.log(req.user._id+'haiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
     next();
   } catch (error) {
     console.log(error);
     return res
       .status(404)
       .json({ message: "Authentication failed: invalid token." });
+  }
+};
+
+const verifyAdminToken = async (req, res, next) => {
+  try {
+    // Use the verifyToken function to verify the token first
+    await verifyToken(req, res, async () => {
+      // Check if the user role is 'admin'
+      if (req.user && req.user.role === 'admin') {
+        next(); // If admin, proceed to the next middleware
+      } else {
+        res.status(403).json({ message: 'Access denied: Not an admin.' });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(404)
+      .json({ message: 'Authentication failed: invalid token.' });
   }
 };
 
@@ -55,4 +74,5 @@ module.exports = {
   generateAuthToken,
   adminToken,
   turfAdminToken,
+  verifyAdminToken
 };

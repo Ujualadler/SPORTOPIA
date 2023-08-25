@@ -136,7 +136,6 @@ const turfBookingHistory = async (req, res) => {
       .sort({ _id: -1 })
       .populate("user")
       .populate("turf")
-      console.log(history)
     res.json({ history });
   } catch (error) {
     res.status(500).json({ error: "Failed to send bookingHistory" });

@@ -5,7 +5,7 @@ import AdminNavbar from '../../Components/Admin/AdminNavbar/AdminNavbar'
 function AdminHomePage() {
   return (
     <>
-    <div className='flex'> 
+    <div className='flex h-screen overflow-hidden'> 
     <AdminNavbar/>
     <AdminHome/>
     </div>

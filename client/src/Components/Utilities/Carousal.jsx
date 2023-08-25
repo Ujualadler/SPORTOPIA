@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import "./Carousal.css";
 
-export default function Carousal({ slides, interval=1000, auto=true, padding=null }) {
+export default function Carousal({
+  slides,
+  interval = 1000,
+  auto = true,
+  padding = null,
+}) {
   const sliderTrackRef = useRef(null);
   const [sliderWidth, setSliderWidth] = useState(null);
   const [sliderLength, setSliderLength] = useState(null);
@@ -16,14 +21,13 @@ export default function Carousal({ slides, interval=1000, auto=true, padding=nul
     }
   }, []);
 
-
   useEffect(() => {
     const intervalFunction = () => {
       if (currentSlide === sliderLength) {
         sliderTrackRef.current.scrollLeft = 0;
         setCurrentSlide(1);
       } else {
-        handleNextClick()
+        handleNextClick();
       }
     };
 
@@ -37,13 +41,11 @@ export default function Carousal({ slides, interval=1000, auto=true, padding=nul
     return () => {
       clearInterval(intervalId);
     };
-  }, [currentSlide, sliderWidth])
-
+  }, [currentSlide, sliderWidth]);
 
   const handleNextClick = () => {
     if (currentSlide === 1) sliderTrackRef.current.scrollLeft = sliderWidth;
     else sliderTrackRef.current.scrollLeft = currentSlide * sliderWidth;
-    console.log();
     setCurrentSlide((prevSlider) => prevSlider + 1);
   };
   const handlePrevClick = () => {
@@ -58,13 +60,16 @@ export default function Carousal({ slides, interval=1000, auto=true, padding=nul
 
   return (
     <>
-      <div className="slider-holder" style={{padding: `${ padding ? padding+'px': '5px'}`}}>
+      <div
+        className="slider-holder"
+        style={{ padding: `${padding ? padding + "px" : "5px"}` }}
+      >
         <div className="slider overflow-hidden">
           <div className="slider-track flex" ref={sliderTrackRef}>
             {slides.length > 0 &&
               slides.map((slide) => (
                 <div
-                key={slide.id}
+                  key={slide.id}
                   id={`slide-${slide.id}`}
                   className="carousel-item relative w-full h-auto snap-x snap-mandatory"
                 >
@@ -74,7 +79,7 @@ export default function Carousal({ slides, interval=1000, auto=true, padding=nul
                       {slide.title}
                     </h3>
                     <p className="sub-text font-bold  text-slate-300 text-xl mt-3  tracking-widest">
-                      {slide.description}
+                      {slide.subTitle}
                     </p>
                   </div>
                 </div>

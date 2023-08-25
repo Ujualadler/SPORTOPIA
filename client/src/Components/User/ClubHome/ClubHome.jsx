@@ -57,14 +57,14 @@ function ClubHome() {
 
   return (
     <>
-      <div className="flex justify-center md:justify-between md:ml-5 md:mr-5">
+      <div className="flex justify-between mx-2 md:mx-5">
         <div className="mt-2 font-bold text-xl font-heading text-white uppercase md:tracking-widest ">
           REQUESTS
         </div>
         <div>
           <button
             onClick={members}
-            className="text-lg font-bold font-heading text-white uppercase md:tracking-widest bg-black w-[7rem] h-[3rem]"
+            className="text-lg font-bold font-heading text-white uppercase md:tracking-widest rounded-md bg-black w-[7rem] h-[3rem]"
           >
             MEMBERS
           </button>

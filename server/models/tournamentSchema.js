@@ -48,6 +48,10 @@ const tournamentSchema = new mongoose.Schema({
       ref: "Club",
     },
   ],
+  isCancelled: {
+    type: Boolean,
+    default:false
+  },
 
 });
 

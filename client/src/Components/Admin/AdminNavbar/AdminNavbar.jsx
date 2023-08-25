@@ -28,28 +28,32 @@ function AdminNavbar() {
     navigate("/admin/viewUser");
   };
 
+  const bannerget = () => {
+    navigate("/admin/banner");
+  };
+
   const dashboard = () => {
     navigate("/admin/home");
   };
 
   return (
-    <div className="w-1/6 h-screen bg-stone-600 flex flex-col items-center space-y-11">
+    <div className="w-1/6 h-screen bg-gray-950 text-white flex flex-col items-center space-y-11">
       <img src="" className="pt-10 md:pt-32 w-12" alt="" />
       <div className="flex items-center" onClick={dashboard}>
         <FontAwesomeIcon className="h-6 mr-2" icon={faChartSimple} />
-        <div className="font-bold hidden md:block text-black">DASHBOARD</div>
+        <div className="font-bold hidden md:block ">DASHBOARD</div>
       </div>
       <div className="flex items-center" onClick={turfget}>
         <FontAwesomeIcon className="h-6 mr-2" icon={faFutbol} />
-        <div className="font-bold hidden md:block text-black">TURFLIST</div>
+        <div className="font-bold hidden md:block ">TURFLIST</div>
       </div>
       <div className="flex items-center" onClick={userget}>
         <FontAwesomeIcon className="h-6 mr-2" icon={faUser} />
-        <div className="font-bold hidden md:block text-black">USERLIST</div>
+        <div className="font-bold hidden md:block">USERLIST</div>
       </div>
-      <div className="cursor-pointer flex items-center">
+      <div className="cursor-pointer flex items-center" onClick={bannerget}>
         <FontAwesomeIcon className="h-6 mr-2" icon={faImage} />
-        <div className="font-bold hidden md:block text-black">BANNER</div>
+        <div className="font-bold hidden md:block">BANNER</div>
       </div>
       <div className="flex-grow"></div>
       <div onClick={exit} className="mt-auto flex items-center">

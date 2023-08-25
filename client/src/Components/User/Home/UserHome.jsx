@@ -1,10 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Carousal from "../../Utilities/Carousal";
 import { Link } from "react-router-dom";
-import { dummySlides } from "../../../utils/dummy";
-import Footer from "../Footer/Footer";
+import AdminAxios from "../../../Axios/adminAxios";
 
 function UserHome() {
+  const [banner, setBanner] = useState("");
+  const adminAxios = AdminAxios();
+
+  useEffect(() => {
+    try {
+      const getBanner = async () => {
+        const response = await adminAxios.get("/getBanner");
+        if (response) {
+          setBanner(response.data.banner);
+        }
+      };
+      getBanner();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <>
       <div className="flex justify-center md:justify-between">
@@ -15,7 +31,7 @@ function UserHome() {
           <Link to="/turf/login">LOGIN AS TURF ADMIN</Link>
         </div>
       </div>
-      <Carousal slides={dummySlides} interval={3} auto={false} />
+      <Carousal slides={banner ? banner : ""} interval={3} />
 
       <div className="max-w-xl mx-auto text-center py-24 md:py-32">
         <div className="w-24 h-2 bg-black mb-4 mx-auto"></div>
@@ -38,8 +54,8 @@ function UserHome() {
             JOIN IN CLUBS
           </h1>
           <p className="text-white mb-10 text-base md:text-lg font-bold">
-             Dive into a community of like-minded
-            individuals who share your enthusiasm for sports and active living.
+            Dive into a community of like-minded individuals who share your
+            enthusiasm for sports and active living.
           </p>
           <button
             href="/pages/about-us"

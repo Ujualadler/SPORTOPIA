@@ -21,7 +21,7 @@ const signUp = async (req, res, next) => {
           contactNumber: turfdetails.phone,
         })
         .then((data) => {
-          console.log(data);
+          // console.log(data);
         })
         .catch((error) => {
           console.log(error);
@@ -116,8 +116,109 @@ const login = async (req, res, next) => {
   }
 };
 
+const googlelogin = async (req, res, next) => {
+  try {
+    const payload = req.body;
+    console.log(payload.email);
+    const user = await turfModel.findOne({ email: payload.email });
+    let userSignUp = {
+      Status: false,
+      message: null,
+      token: null,
+      name: null,
+    };
+    if (user) {
+      if (user.isVerified === 1) {
+        if (user.isBlocked === false) {
+          const token = authToken.turfAdminToken(user);
+          userSignUp.message = "You are logged";
+          userSignUp.Status = true;
+          userSignUp.token = token;
+          userSignUp.name = user.name;
+          res.json({ userSignUp });
+        } else {
+          userSignUp.message = "You are blocked by admin";
+          userSignUp.Status = false;
+          res.json({ userSignUp });
+        }
+      } else {
+        userSignUp.message = "Verify your email";
+        userSignUp.Status = false;
+        res.json({ userSignUp });
+      }
+    } else {
+      userSignUp.message = "You need to register first";
+      userSignUp.Status = false;
+      res.json({ userSignUp });
+    }
+  } catch (err) {
+    res.status(500).json({ error:err.message });
+  }
+};
+
+const turfProfile = async (req, res, next) => {
+  try {
+	  const id = req.user._id;
+	  let userDetails = await turfModel.findOne({ _id: id});
+	  if (userDetails) {
+		res.status(200).json({ data: userDetails });
+	  } else {
+		res.status(500).send({ error: "no user" });
+	  }
+	} catch (error) {
+	  res.json({ status: "failed", message: error.message });
+	}
+  };
+
+  const getAdminDetail = async (req, res) => {
+    try {
+      const user = req.user;
+      const userdata = await turfModel.findOne({ _id: user._id });
+      if (userdata) {
+      res.status(200).json({ data: userdata });
+      } else {
+      res.status(500).send({ error: "no user" });
+      }
+    } catch (error) {
+      res.json({ status: "failed", message: error.message });
+    }
+    };
+    
+    // profile editing in user side
+    
+    const editProfile = async (req, res, next) => {
+    const data = req.body;
+    const id = req.user._id;
+    try {
+      await turfModel.updateOne(
+      { _id: id },
+      {
+        $set: {
+        name: data.name,
+        contactNumber: data.contactNumber,
+        image: data.image,
+        city: data.city,
+        state: data.state,
+        pin: data.pin,
+        street: data.street,
+        age: data.age,
+        },
+      }
+      );
+      res.json({ status: "success" });
+    } catch (error) {
+      console.log(error.message);
+      res.json({ status: "failed", message: error.message });
+    }
+    };
+
+
 module.exports = {
   signUp,
   login,
   verifyTurf,
+  googlelogin,
+  turfProfile,
+  getAdminDetail,
+  editProfile
 };

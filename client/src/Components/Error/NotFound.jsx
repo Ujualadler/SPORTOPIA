@@ -2,10 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const NotFound = () => {
+  console.log('first found')
   return (
     <>
-      <section className="relative z-10 bg-primary py-[120px]">
-        <div className="container">
+      <section className="bg-gray-900 h-screen flex relative z-10 bg-primary ">
+        <div className="container m-auto">
           <div className="flex -mx-4">
             <div className="w-full px-4">
               <div className="mx-auto max-w-[400px] text-center">
@@ -18,12 +19,12 @@ const NotFound = () => {
                 <p className="mb-8 text-lg text-white">
                   The page you are looking for it maybe deleted
                 </p>
-                <a
+                <div
                   
                   className="inline-block px-8 py-3 text-base font-semibold text-center text-white transition border border-white rounded-lg hover:bg-white hover:text-primary"
                 >
                   <Link to='/'>Go to Home</Link>
-                </a>
+                </div>
               </div>
             </div>
           </div>

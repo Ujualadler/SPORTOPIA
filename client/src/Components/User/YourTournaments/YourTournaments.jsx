@@ -36,6 +36,10 @@ function YourTournaments() {
     navigate(`/viewTournament/${id}`)
   }
 
+  const editTournament=(id)=>{
+    navigate(`/editTournament/${id}`)
+  }
+
   return (
     <>
       <div className="flex justify-center md:justify-between  ">
@@ -71,15 +75,29 @@ function YourTournaments() {
                 </ul>
               </div>
               <div className="my-auto">
-               <button
+                {result.isCancelled?<button
+                  className="bg-black w-[7rem] mb-3 h-[2rem] hover:bg-slate-700 rounded-md text-white md:font-bold "
+                >
+                  CANCELLED
+                </button>:<>
+                <button
                   onClick={() => {
                     viewTournament(result._id);
                   }}
-                  className="bg-black w-[7rem] mb-3 h-[2rem] hover:bg-slate-700 rounded-md text-white md:font-bold "
+                  className="bg-black w-[7rem] mb-3 h-[2rem] mr-4 hover:bg-slate-700 rounded-md text-white md:font-bold "
                 >
                   VIEW
                 </button>
-                
+                <button
+                onClick={() => {
+                  editTournament(result._id);
+                }}
+                className="bg-black w-[7rem] mb-3 h-[2rem] hover:bg-slate-700 rounded-md text-white md:font-bold "
+              >
+                EDIT
+              </button>
+              </>
+                }
               </div>
             </div>
           );

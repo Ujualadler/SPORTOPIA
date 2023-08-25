@@ -36,7 +36,7 @@ const ProfilePage = () => {
               </div>
               <img
                 className="w-44 h-44 rounded-full relative "
-                src={UserData ? UserData.image : ""}
+                src={UserData.image? UserData.image : "https://as1.ftcdn.net/v2/jpg/02/09/95/42/1000_F_209954204_mHCvAQBIXP7C2zRl5Fbs6MEWOEkaX3cA.jpg"}
                 alt=""
               />
             </div>

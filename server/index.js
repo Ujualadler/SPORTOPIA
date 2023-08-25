@@ -1,8 +1,6 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv").config();
-const cookieParser = require("cookie-parser");
 const { connectDb } = require("./config/dbConnection");
 const socketIo = require("socket.io");
 
@@ -38,10 +36,10 @@ const io = socketIo(server, {
     origin: "*",
     credentials: true,
   },
-}).of("/chat")
+})
 
 
-io.on("connection", (socket) => {
+io.of("/chat").on("connection", (socket) => {
   socket.on("joinRoom", (clubId) => {
     // Join the specific room based on the clubId
     socket.join(clubId);
@@ -50,10 +48,8 @@ io.on("connection", (socket) => {
 
   socket.on("chatMessage", (receivedClubId, message) => {
     console.log(`Received message: ${message} in room: ${receivedClubId}`);
-    console.log("dfghjkfghjklfghjk",message)
-    
     // Emit the message to the specific room based on the clubId
-    io.to(receivedClubId).emit("message", message, receivedClubId);
+    io.of("/chat").to(receivedClubId).emit("message", message, receivedClubId);
   });
   socket.on("error" , err =>{
     console.log('backend error ' , err);
@@ -67,32 +63,46 @@ io.on("connection", (socket) => {
 
 
 //  Turf booking socket
-// const bookingIo = socketIo(server, {
-//   cors: {
-//     origin: '*',
-//     credentials: true
-//   }
-// }).of("/bookingIo")
+let onBooking = {}
 
-// bookingIo.on("connection", (socket) => {
-//   socket.on("joinBooking", (clubId) => {
-//     // Join the specific room based on the clubId
-//     socket.join(clubId);
-//     console.log(`Socket joined room: ${clubId}`);
-//   });
+io.of('/booking').on("connection", (socket) => {
+  socket.on("joinBooking", (turfId) => {
+    // Join the specific room based on the turfId
+    socket.join(turfId);
+    io.of('/booking').to(turfId).emit("message", turfId, onBooking[turfId]);
+    console.log(`Socket joined room: ${turfId}`);
+  });
 
-//   socket.on("updateBooking", (receivedClubId) => {
-//     console.log(`Received message:  in room: ${receivedClubId}`);
-//     console.log("booking", receivedClubId)
+  socket.on("updateBooking", (receivedturfId, date, slot, user) => {
+    if (!Object.keys(onBooking).includes(receivedturfId))
+      onBooking[receivedturfId] = {}
     
-//     // Emit the message to the specific room based on the clubId
-//     io.to(receivedClubId).emit("message", receivedClubId);
-//   });
-//   socket.on("error" , err =>{
-//     console.log('backend error ' , err);
-//   })
+    if (!onBooking[receivedturfId][date]) 
+      onBooking[receivedturfId][date] = [{slot: slot, user: user}]
+    else
+      onBooking[receivedturfId][date].push({slot, user})
+    
+    console.log(`booking slot, ${slot}, on ${date} in: ${receivedturfId}`);
+    console.log(onBooking)
+    
+    // Emit the message to the specific room based on the turfId
+    io.of('/booking').to(receivedturfId).emit("message", receivedturfId, onBooking[receivedturfId]);
+  });
 
-//   socket.on("disconnect", (ev) => {
-//     console.log("Socket disconnected" , ev);
-//   });
-// });
+  socket.on("removeBooking", (receivedturfId, date, slot, user) => {
+    onBooking[receivedturfId][date].splice(onBooking[receivedturfId][date].indexOf({slot, user}), 1);
+     
+    console.log(onBooking)
+    
+    // Emit the message to the specific room based on the turfId
+    io.of('/booking').to(receivedturfId).emit("message", receivedturfId, onBooking[receivedturfId]);
+  });
+
+  socket.on("error" , err =>{
+    console.log('backend error ' , err);
+  })
+
+  socket.on("disconnect", (ev) => {
+    console.log("Socket disconnected" , ev);
+  });
+});

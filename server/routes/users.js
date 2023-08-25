@@ -44,11 +44,13 @@ router.post('/addMessage',auth.verifyToken,chatController.addMessage)
 router.post('/getMessage',auth.verifyToken,chatController.getMessage)
 router.get('/getTournaments',auth.verifyToken,tournamentController.getTournaments)
 router.get('/leaveTournament',auth.verifyToken,tournamentController.leaveTournament)
+router.get('/cancelTournament',auth.verifyToken,tournamentController.cancelTournament)
 router.get('/getTournamentDetails',auth.verifyToken,tournamentController.getTournamentDetails)
 router.get('/getYourTournaments',auth.verifyToken,tournamentController.getYourTournaments)
 router.get('/getJoinedTournaments',auth.verifyToken,tournamentController.getJoinedTournaments)
 router.post('/joinTournament',auth.verifyToken,tournamentController.joinTournament)
 router.post('/createTournament',upload.single('detailedDocument'),auth.verifyToken,tournamentController.createTournament)
+router.post('/editTournament',upload.single('detailedDocument'),auth.verifyToken,tournamentController.editTournament)
 
 
 

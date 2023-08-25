@@ -198,7 +198,7 @@ const TurfEdit = () => {
         }}
       />
       <div className="border-b-2 block md:flex md:ml-12 md:mr-12">
-        <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 m-7 ml-1.5 border border-gray-700 bg-gray-900 bg-opacity-60 shadow-2xl">
+        <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 border border-gray-700 bg-gray-900 bg-opacity-60 shadow-2xl">
           <div className="flex justify-between">
             <span className="text-xl text-white font-semibold block">
               EDIT TURF DETAILS
@@ -233,9 +233,9 @@ const TurfEdit = () => {
             </div>
           </div>
           <h3 className="w-full font-semibold m-2 text-white">TURF IMAGES</h3>
-          <div className="flex flex-wrap bg-gray-950   shadow-2xl">
+          <div className=" flex-wrap col grid grid-cols-2 bg-gray-950  shadow-2xl">
             {photos.map((pic, index) => (
-              <div key={index} className="m-2 md:ml-3 ">
+              <div key={index}  className="m-2 col-span-1 md:ml-3 ">
                 <input
                   ref={(el) => (fileInputRefs[index] = el)}
                   type="file"
@@ -246,7 +246,7 @@ const TurfEdit = () => {
                   onClick={() => {
                     fileInputRefs[index].click();
                   }}
-                  className="w-[9.5rem] h-36 md:w-52 hover:bg-opacity-75 transition-all duration-300 md:h-40 rounded-md"
+                  className="hover:bg-opacity-75 transition-all duration-300 h-32 md:h-36 rounded-md"
                   src={photoPreviews[index] || pic}
                   alt=""
                 />
@@ -255,7 +255,7 @@ const TurfEdit = () => {
           </div>
         </div>
 
-        <div className="w-full md:w-3/5 p-8 border m-7 ml-1 border-gray-700 bg-gray-900 bg-opacity-60 lg:ml-4 shadow-2xl">
+        <div className="w-full md:w-3/5 p-8 border ml-1 border-gray-700 bg-gray-900 bg-opacity-60 lg:ml-4 shadow-2xl">
           <div className="rounded shadow p-6">
             <div className="pb-2">
               <label

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Useraxios from "../../../Axios/userAxios";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -10,6 +10,7 @@ function ViewTournament() {
   const clubId = useSelector((state) => state.Club.clubId);
   const [tournamentData, setTournamentData] = useState("");
   const [join, setJoin] = useState(false);
+  const navigate=useNavigate()
 
   useEffect(() => {
     const getData = async (req, res) => {
@@ -75,24 +76,41 @@ function ViewTournament() {
       const response=await userAxios.post(`/joinTournament`,{clubId,id})
       if(response.data.result==='success'){
         toast.success('Successfully joined')
+        navigate('/joinedTournaments')
       }else if(response.data.result==='joined'){
         toast.error('You are already part of this tournament')
+      }
+      else if(response.data.result==='limit'){
+        toast.error('Team limit reached')
       }else{
         toast.error('Failed to join')
       }
     } catch (error) {
-      
+      console.log(error);
     }
   }
 
   const leaveTournament=async()=>{
     try {
       const response=await userAxios.get(`/leaveTournament?id=${id}&clubId=${clubId}`)
-      if(response){
-        
+      if(response.data.status===true){
+        toast.success('You left the tournament')
+        navigate('/tournaments')
       }
     } catch (error) {
-      
+      console.log(error);
+    }
+  }
+
+  const cancelTournament=async()=>{
+    try {
+      const response=await userAxios.get(`/cancelTournament?id=${id}`)
+      if(response.data.status===true){
+        toast.success('Tournament Cancelled')
+        navigate('/yourTournaments')
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
   
@@ -130,6 +148,18 @@ function ViewTournament() {
               </div>
               <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
                 {tournamentData?.maximumTeams}
+              </div>
+            </div>
+          </li>
+          <li className="py-3 sm:py-4">
+            <div className="flex items-center space-x-4">
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
+                  NO OF TEAMS JOINED
+                </p>
+              </div>
+              <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                {tournamentData?.joinedClubs?.length}
               </div>
             </div>
           </li>
@@ -190,7 +220,8 @@ function ViewTournament() {
         {/* <a href={tournament.detailedDocument} target="_blank" rel="noopener noreferrer">View PDF</a> */}
         {join===true?<button onClick={()=>joinTournament(tournamentData._id)} className="font-bold bg-red-900 h-[2rem] w-[5rem] rounded-sm">
           JOIN
-        </button>:join==='join'?<button onClick={leaveTournament} className="font-bold bg-red-900 h-[2rem] w-[5rem] rounded-sm" >LEAVE</button>:''}
+        </button>:join==='join'?<button onClick={leaveTournament} className="font-bold bg-red-900 h-[2rem] w-[5rem] rounded-sm" >LEAVE</button>:join===false?
+        <button onClick={cancelTournament} className="font-bold bg-red-900 h-[2rem] w-[5rem] rounded-sm" >CANCEL</button>:""}
       </div>
     </>
   );

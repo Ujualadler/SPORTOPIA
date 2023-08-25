@@ -69,30 +69,33 @@ function ClubTournament() {
                 <div className="bg-gradient-to-r from-gray-800 to-gray-400  w-[10rem] h-[10rem] mt-3 md:m-2 flex justify-center">
                   <img
                     className="w-[6rem] h-[6rem] mb-auto mt-auto"
-                    src={result.clubId.logo}
+                    src={result?.clubId.logo}
                   />
                 </div>
               </div>
               <div className="flex items-center">
                 <ul className="mt-4 mb-4 ">
                   <h2 className="font-bold mt-4 text-lg text-white trackinge-wide">
-                    {result.tournamentName}
+                    {result?.tournamentName}
                   </h2>
                   <li className="font-semibold mt-3  text-gray-400">
-                  Sports type:{result.sportsType}
+                  Sports type:{result?.sportsType}
                   </li>
                   <li className="font-semibold mt-3  text-gray-400">
-                    Starting Date:{convertISODateToReadable(result.startingDate)}
+                    Starting Date:{convertISODateToReadable(result?.startingDate)}
                   </li>
                   <li className="font-semibold mt-3  text-gray-400">
-                    Ending Date:{convertISODateToReadable(result.endingDate)}
+                    Ending Date:{convertISODateToReadable(result?.endingDate)}
+                  </li>
+                  <li className="font-semibold mt-3  text-gray-400">
+                    No of club joined:{result?.joinedClubs?.length}/{result?.maximumTeams}
                   </li>
                 </ul>
               </div>
               <div className="my-auto">
                <button
                   onClick={() => {
-                    viewTournament(result._id);
+                    viewTournament(result?._id);
                   }}
                   className="bg-black w-[7rem] mb-3 h-[2rem] hover:bg-slate-700 rounded-md text-white md:font-bold "
                 >

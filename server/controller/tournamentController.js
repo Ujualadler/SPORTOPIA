@@ -18,7 +18,6 @@ const createTournament = async (req, res) => {
       clubId,
     } = req.body;
     const detailedDocument = req.file;
-    console.log(detailedDocument)
 
     let pdf;
     if (detailedDocument) {
@@ -64,14 +63,14 @@ const getTournaments = async (req, res) => {
       // Calculate the date that is 2 days from now
       const twoDaysLater = new Date();
       twoDaysLater.setDate(twoDaysLater.getDate() + 2); 
-      
-      console.log(twoDaysLater)
 
       const result = await tournamentModel.find({
-        clubId: { $ne: clubId }, // Use $ne to find tournaments with clubId not equal to the given value
-        startingDate: { $gte: twoDaysLater },
+        $and: [
+          { clubId: { $ne: clubId } },
+          { isCancelled: false },
+          { startingDate: { $gte: twoDaysLater } }
+        ]
       }).populate('clubId');
-      
       
       res.status(200).json({ result });
     } catch (error) {
@@ -114,7 +113,10 @@ const getTournaments = async (req, res) => {
         _id: id,
         joinedClubs: clubId,
       });
-  
+
+      const verifyLength=await tournamentModel.findById({_id: id})
+      const lengthOfClub=verifyLength.joinedClubs.length
+      if(lengthOfClub<verifyLength.maximumTeams){
       if (!tournament) {
         const updatedTournament = await tournamentModel.findOneAndUpdate(
           { _id: id },
@@ -130,6 +132,9 @@ const getTournaments = async (req, res) => {
       } else {
         res.status(200).json({ result: 'joined' });
       }
+    }else{
+      res.status(200).json({ result: 'limit' });
+    }
     } catch (error) {
       console.error("Error handling club's participation:", error);
       res.status(500).json({ error: "An error occurred while handling participation" });
@@ -165,12 +170,76 @@ const getTournaments = async (req, res) => {
         { _id: id, joinedClubs: clubId },
         { $pull: { joinedClubs: clubId } },
         { new: true }
-      );
+      )
+
+      res.status(200).json({status:true})
       
     } catch (error) {
-      
+      res.status(500).json({ error: "An error occurred while leaving tournament" });
     }
   }
+
+  const cancelTournament=async(req,res)=>{
+    try {
+      const id=req.query.id
+
+      const updatedTournament = await tournamentModel.findOneAndUpdate(
+        { _id: id},
+        { $set: { isCancelled: true } },
+        { new: true }
+      );
+
+      res.status(200).json({status:true})
+      
+    } catch (error) {
+      res.status(500).json({ error: "An error occurred while leaving tournament" });
+    }
+  }
+
+  const editTournament = async (req, res) => {
+    try {
+      const id = req.query.id;
+      const {
+        tournamentName,
+        sportsType,
+        description,
+        maximumTeams,
+      } = req.body;
+      const detailedDocument = req.file;
+  
+      let pdf;
+      if (detailedDocument) {
+        const uploadOptions = {
+          resource_type: 'auto', // Automatically determine the resource type
+        };
+        const upload = await cloudinary.uploader.upload(
+          detailedDocument.path,
+          uploadOptions
+        );
+  
+        pdf = upload.secure_url;
+        fs.unlinkSync(detailedDocument.path); // Unlink the local path of the uploaded file
+      }
+  
+      const newTournament = await tournamentModel.updateOne(
+        { _id: id },
+        {
+          $set: {
+            tournamentName,
+            sportsType,
+            description,
+            maximumTeams,
+            detailedDocument: pdf, // Save the URL of the uploaded document
+          },
+        }
+      );
+      res.status(201).json({ status: "success", tournament: newTournament });
+    } catch (error) {
+      console.error("Error editing tournament:", error);
+      res.status(500).json({ error: "An error occurred while editing the tournament" });
+    }
+  };
+  
   
   
   
@@ -183,5 +252,7 @@ module.exports = {
   joinTournament,
   getJoinedTournaments,
   getYourTournaments,
-  leaveTournament
+  leaveTournament,
+  cancelTournament,
+  editTournament
 };

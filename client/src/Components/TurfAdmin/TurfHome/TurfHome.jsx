@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Carousal from "../../Utilities/Carousal";
 import Cards from "../../Utilities/Cards";
-
-import { dummySlides } from "../../../utils/dummy";
 import { Link } from "react-router-dom";
+import AdminAxios from "../../../Axios/adminAxios";
+
 
 function TurfHome() {
-  const [slides, setSlides] = useState(dummySlides);
+  const [banner, setBanner] = useState("");
+  const adminAxios = AdminAxios();
 
-  console.log(slides);
+  useEffect(() => {
+    try {
+      const getBanner = async () => {
+        const response = await adminAxios.get("/getBanner");
+        if (response) {
+          setBanner(response.data.banner);
+        }
+      };
+      getBanner();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
 
   let register = {
     image: "https://wallpaperaccess.com/full/1767917.jpg",
@@ -36,11 +50,11 @@ function TurfHome() {
   return (
     <>
       <div className="flex justify-center md:justify-start">
-        <div className="text-xl text-black font-bold tracking-[6px] md:ml-8 mt-5">
+        <div className="md:text-xl text-black font-bold tracking-[6px] md:ml-8 mt-5">
           WELCOME TURF ADMIN
         </div>
       </div>
-      <Carousal slides={slides} />
+      <Carousal slides={banner?banner:''} interval={4} />
       <div class="flex flex-wrap bg-black m-1">
         <Cards reg={register} />
         <Cards reg={bookinglist} />

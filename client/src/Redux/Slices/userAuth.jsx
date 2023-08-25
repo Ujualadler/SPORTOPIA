@@ -14,8 +14,6 @@ export const UserAuth = createSlice({
             state.Token = "";
         },
         GetUserData(state,action){
-            console.log(action+'kkkkk')
-            console.log(action.payload.userData)
             state.UserData = action.payload.userData;
         }
     },

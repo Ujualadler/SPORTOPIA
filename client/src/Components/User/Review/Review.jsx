@@ -7,7 +7,7 @@ const Review = (review) => {
     
     // const [menu, setMenu] = useState(true);
     return (
-        data?data.map((doc)=>{return( <div className="py-8 px-4 md:px-3 2xl:px-0 2xl:container 2xl:mx-auto  items-center w-full">
+        data?data.map((doc)=>{return( <div key={data._id} className="py-8 px-4 md:px-3 2xl:px-0 2xl:container 2xl:mx-auto  items-center w-full">
         <div className="flex flex-col justify-start  space-y-3">
             <div className="flex justify-start items-start">
                 <p className="text-xl lg:text-2xl font-bold ml-4 leading-7 font-poppins lg:leading-9 text-white">REVIEWS</p>

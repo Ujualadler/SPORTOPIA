@@ -7,7 +7,6 @@ import Swal from "sweetalert2";
 
 function AdminViewTurf() {
   const adminAxios=Adminaxios()
-
   const token = useSelector((store) => store.Admin.Token);
   const [turfData, setTurfData] = useState([]);
   const [SearchInput, setSearchInput] = useState("");

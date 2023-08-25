@@ -47,7 +47,7 @@ const CreateTournament = () => {
     const year = minStartingDate.getFullYear();
     const month = String(minStartingDate.getMonth() + 1).padStart(2, '0');
     const day = String(minStartingDate.getDate()).padStart(2, '0');
-  
+   
     return `${year}-${month}-${day}`;
   };
 
@@ -111,7 +111,7 @@ const CreateTournament = () => {
       .then((res) => {
         if (res.data.status === "success") {
           successToast("Tournament Successfully Created");
-          navigate('/tournaments')
+          navigate('/yourTournaments')
         } else {
           errorToast(res.data.status);
         }
@@ -127,7 +127,7 @@ const CreateTournament = () => {
         <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 m-7 ml-1.5 border border-gray-700 bg-gray-900 bg-opacity-60 shadow-2xl">
           <div className="flex justify-between">
             <span className="text-xl font-semibold font-heading text-white uppercase md:tracking-widest block">
-              CREATE A CLUB
+              CREATE A TOURNAMENT
             </span>
           </div>
           <div className="w-full p-8 mx-2 flex justify-center">

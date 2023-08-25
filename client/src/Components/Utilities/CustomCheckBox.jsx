@@ -1,8 +1,16 @@
-const CustomCheckbox = ({ checked, onChange }) => {
+import { toast } from "react-toastify";
+
+const CustomCheckbox = ({ checked, onChange, disabled }) => {
+  
     return (
       <div
-        className="cursor-pointer checkbox border rounded border-blue-700 w-6 h-6 flex items-center justify-center mr-2"
-        onClick={onChange}
+        className={`cursor-pointer checkbox border rounded  w-6 h-6 flex items-center justify-center mr-2 ${disabled ? 'border-gray-700 cursor-not-allowed' : 'border-blue-700'}`}
+        onClick={()=> {
+          if(!disabled)
+            onChange()
+          else
+            toast.error('Another user is already booking the same slot')
+        }}
       >
         {checked && (
           <svg

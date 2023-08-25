@@ -4,6 +4,7 @@ import { Toaster, toast } from "react-hot-toast";
 import { TurfLogin } from "../../../Redux/Slices/turfAuth";
 import { useState, react } from "react";
 import { useDispatch } from "react-redux";
+import TurfGoogle from "./TurfGoogleLogin";
 
 export default function TurfLoginPage() {
 
@@ -134,6 +135,7 @@ export default function TurfLoginPage() {
               </button>
             </div>
           </form>
+          <TurfGoogle/>
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?{" "}

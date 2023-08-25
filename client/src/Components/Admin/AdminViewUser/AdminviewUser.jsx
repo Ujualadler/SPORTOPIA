@@ -125,20 +125,20 @@ function AdminviewUser() {
                 .map((obj, index) => {
                   return (
                     <tr
-                      key={obj._id}
+                      key={obj?._id}
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                     >
-                      <th key={obj._id} className="pl-9">
+                      <th key={obj?._id} className="pl-9">
                         {index + 1}
                       </th>
-                      <td className="px-6 py-4"><img className="w-16" src={obj.image} alt="" /></td>
-                      <td className="px-6 py-4">{obj.name}</td>
-                      <td className="px-6 py-4">{obj.email}</td>
-                      <td className="px-6 py-4">{obj.contactNumber}</td>
+                      <td className="px-6 py-4"><img className="w-16" src={obj.image?obj.image:'https://as1.ftcdn.net/v2/jpg/02/09/95/42/1000_F_209954204_mHCvAQBIXP7C2zRl5Fbs6MEWOEkaX3cA.jpg'} alt="" /></td>
+                      <td className="px-6 py-4">{obj?.name}</td>
+                      <td className="px-6 py-4">{obj?.email}</td>
+                      <td className="px-6 py-4">{obj?.contactNumber}</td>
                       <td className="px-6 py-4">
                         {obj.isBlocked ? (
                           <button
-                            onClick={() => blockUser(obj._id)}
+                            onClick={() => blockUser(obj?._id)}
                             key={obj._id}
                             className=" bg-green-900 w-15 text-white font-mono rounded-md w-[4rem]"
                           >

@@ -9,7 +9,7 @@ import { auth } from '../../../Firebase/firebase.config';
 import { useDispatch } from 'react-redux'
 import { UserLogin } from "../../../Redux/Slices/userAuth";
 import { useNavigate } from 'react-router-dom'
-import { Toast } from 'flowbite-react'
+
 
 function OtpLogin() {
 
@@ -24,7 +24,6 @@ function OtpLogin() {
   const [data, setData] = useState('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
 
   const checkMob = () => {
     setResend(false)
@@ -52,7 +51,7 @@ function OtpLogin() {
             });
         }else{
                 toast.error(error?.response?.data?.errMsg)
-                Toast.error('INVALID MOBILE')
+                toast.error('INVALID MOBILE')
         }
       }).catch((err)=>{
         toast.error('register first')
@@ -85,7 +84,6 @@ function OtpLogin() {
       setResend(true)
       setClicked(false)
       toast.error('Otp verify error')
-      console.log(err + 'otp verify error');
     })
   }
 

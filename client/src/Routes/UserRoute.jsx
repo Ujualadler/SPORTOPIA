@@ -28,6 +28,8 @@ import ClubTournamentPage from "../Pages/User/ClubTournamentPage";
 import ViewTournamentPage from "../Pages/User/viewTournamentPage";
 import JoinedTournamentsPage from "../Pages/User/JoinedTournamentsPage";
 import YourTournamentsPage from "../Pages/User/YourTournamentsPage";
+import NotFound from "../Components/Error/NotFound";
+import EditTournamentPage from "../Pages/User/EditTournamentPage";
 
 
 function UserRoute() {
@@ -63,6 +65,8 @@ function UserRoute() {
         <Route path="/viewTournament/:id" element={userToken?<ViewTournamentPage/>:<Login/>}/>
         <Route path="/joinedTournaments" element={userToken?<JoinedTournamentsPage/>:<Login/>}/>
         <Route path="/yourTournaments" element={userToken?<YourTournamentsPage/>:<Login/>}/>
+        <Route path="/editTournament/:id" element={userToken?<EditTournamentPage/>:<Login/>}/>
+        <Route path='*' element={<NotFound />}/>
       </Routes>
     </>
   );

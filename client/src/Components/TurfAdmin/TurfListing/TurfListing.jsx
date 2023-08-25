@@ -17,7 +17,6 @@ function TurfListing() {
   useEffect(() => {
     Turfaxios.get("/getTurfsAdmin")
       .then((response) => {
-        console.log(response.data);
         setTurfData(response.data.result);
       })
       .catch((err) => {

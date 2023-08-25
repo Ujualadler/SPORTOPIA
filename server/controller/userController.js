@@ -6,9 +6,11 @@ const nodemailer = require("nodemailer");
 const { trusted } = require("mongoose");
 const auth = require("../middleware/auth");
 
+
 // user email sending
 
 const sendVerifyMail = async (name, email, user_id, check) => {
+  
   try {
     console.log(user_id + "sdfghjkl;");
     const transporter = nodemailer.createTransport({
@@ -194,7 +196,6 @@ const otpLogin = async (req, res) => {
 const googlelogin = async (req, res, next) => {
   try {
     const payload = req.body;
-    console.log(payload.email);
     const user = await userModel.findOne({ email: payload.email });
     let userSignUp = {
       Status: false,
@@ -204,7 +205,6 @@ const googlelogin = async (req, res, next) => {
     };
     if (user) {
       if (user.isVerified === 1) {
-        console.log("hvokhgkhlhli");
         if (user.isBlocked === false) {
           const token = authToken.generateAuthToken(user);
           userSignUp.message = "You are logged";

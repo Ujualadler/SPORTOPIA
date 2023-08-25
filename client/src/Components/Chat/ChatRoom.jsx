@@ -97,9 +97,9 @@ function ChatRoom() {
             </div>
             <div className="flex flex-col leading-tight">
               <div className="text-2xl mt-1 flex items-center">
-                <span className="text-gray-100 mr-3">{userData.name}</span>
+                <span className="text-gray-100 mr-3">{userData?.name}</span>
               </div>
-              <span className="text-lg text-gray-100">{userData.email}</span>
+              <span className="text-lg text-gray-100">{userData?.email}</span>
             </div>
           </div>
         </div>
