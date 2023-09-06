@@ -27,7 +27,6 @@ const turfRegistration = async (req, res) => {
 		console.log(longitude+''+latitude)
 		const turf = await turfModel.find({ turfName: turfName });
 		const admin = req.user._id;
-    console.log(admin+'ooooooooooombiiiii');
 		if (turf.length === 0) {
 			turfModel
 				.create({
@@ -77,9 +76,7 @@ const getTurfs = async (req, res) => {
 const getTurfsAdmin = async (req, res) => {
 	try {
 		const admin = req.user._id;
-    console.log(admin);
 		const turfs = await turfModel.find({ admin: admin });
-    console.log(turfs)
 		res.json({ status: "success", result: turfs });
 	} catch (error) {
 		res.json({ status: "failed", message: error.message });
@@ -106,7 +103,6 @@ const getTurfDetail = async (req, res) => {
 			})
 			.select("bookedSlots bookedDate")
 			.lean();
-		console.log(turfBookings);
 		// append booked dates and slots to turfData
 		turfData.turfBookings = turfBookings;
 

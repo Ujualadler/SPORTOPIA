@@ -23,6 +23,7 @@ function CreatedClubs() {
       })
       .catch((err) => {
         console.log(err);
+        navigate('/error')
       });
   }, []);
   return (

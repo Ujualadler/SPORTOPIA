@@ -11,6 +11,8 @@ import { useSelector } from "react-redux";
 import TurfAdminHome from "../Pages/TurfAdmin/TurfAdminHome";
 import TurfAdminProfilePage from "../Pages/TurfAdmin/TurfAdminProfilePage";
 import TurfEditProfilePage from "../Pages/TurfAdmin/TurfEditProfilePage";
+import TurfOtpLogin from "../Components/TurfAdmin/TurfLogin/TurfOtpLogin";
+import Error from "../Components/Error/Error";
 
 function TurfRoute() {
   const TurfToken = useSelector((store) => store.Turf.Token);
@@ -20,6 +22,7 @@ function TurfRoute() {
       <Routes>
         <Route path="/" element={TurfToken?<TurfAdminHome/>:<TurfLoginPage/>} />
         <Route path="/login" element={<TurfLoginPage/>} />
+        <Route path="/otpLogin" element={TurfToken ? <TurfAdminHome/>: <TurfOtpLogin/>}/>
         <Route path="/signup" element={<TurfSignUp />} />
         <Route path="/verifyTurf/:user_id" element={<VerifyTurfMail />} />
         <Route path="/registration" element={TurfToken?<TurfCreate />:<TurfLoginPage/>} />
@@ -28,6 +31,7 @@ function TurfRoute() {
         <Route path="/bookingHistory" element={TurfToken?<TurfBookHistoryPage />:<TurfLoginPage/>} />
         <Route path="/profile" element={TurfToken?<TurfAdminProfilePage />:<TurfLoginPage/>} />
         <Route path="/editProfile" element={TurfToken?<TurfEditProfilePage />:<TurfLoginPage/>} />
+        <Route path="/error" element={<Error/>}/>
       </Routes>
     </>
   );

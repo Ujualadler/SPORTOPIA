@@ -178,6 +178,7 @@ const TurfEdit = () => {
       })
       .catch((err) => {
         console.log(err);
+        navigate('/turf/error')
       });
   };
 

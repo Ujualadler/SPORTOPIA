@@ -80,6 +80,7 @@ const TurfEditProfile = () => {
         }
     }).catch((err)=>{
         console.log(err)
+        navigate('/turf/error')
     })
   };
 

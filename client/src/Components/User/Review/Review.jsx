@@ -2,10 +2,7 @@ import React, { useState } from "react";
 
 const Review = (review) => {
     const data=review.review.reviews
-    // console.log(data.rating)
-    console.log(review)
     
-    // const [menu, setMenu] = useState(true);
     return (
         data?data.map((doc)=>{return( <div key={data._id} className="py-8 px-4 md:px-3 2xl:px-0 2xl:container 2xl:mx-auto  items-center w-full">
         <div className="flex flex-col justify-start  space-y-3">

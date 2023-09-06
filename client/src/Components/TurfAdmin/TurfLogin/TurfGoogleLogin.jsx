@@ -19,14 +19,13 @@ function TurfGoogle() {
           console.log(credentialResponse);
           const { credential } = credentialResponse;
           const payload = credential ? decodeJwt(credential) : undefined;
-          console.log(payload.email,'===========================');
           if (payload) {
             turfAxios
               .post("/googlelogin", 
               payload
               )
               .then((res) => {
-                console.log(res.data);
+
                 if (res.data.userSignUp.Status===true) {               
                   dispatch(TurfLogin({ token: res.data.userSignUp.token }));
                   navigate("/");
@@ -37,6 +36,7 @@ function TurfGoogle() {
               })
               .catch((err) => {
                 console.log(err);
+                navigate('/turf/error')
               });
           }
         }}

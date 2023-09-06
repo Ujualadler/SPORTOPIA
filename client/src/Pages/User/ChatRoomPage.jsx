@@ -1,18 +1,32 @@
-import React from 'react'
-import ChatRoom from '../../Components/Chat/ChatRoom'
+import React,{Suspense} from 'react'
 import Navbar from '../../Components/User/NavbarUser/NavbarUser'
-import Footer from '../../Components/User/Footer/Footer'
-import ClubNavbar from '../../Components/User/ClubNavbar/ClubNavbar'
+import ClubUserNavbar from '../../Components/User/ClubUserNavbar/ClubUserNavbar';
+import { useParams } from 'react-router-dom';
+import ClubNavbar from '../../Components/User/ClubNavbar/ClubNavbar';
+const LazyChatRoom = React.lazy(() => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(import('../../Components/Chat/ChatRoom'));
+    }, 2000);
+  });
+});
+
 
 function ChatRoomPage() {
+
+  const {role}=useParams()
+  console.log(role+'haaaaaaaaai')
 
   return (
     <>
     <Navbar/>
-    <div className="pt-4  m-1 pb-4 bg-cover text-white bg-center bg-[url(https://media.istockphoto.com/id/1468296537/vector/seamless-camouflaged-black-grunge-textures-wallpaper-background.jpg?s=612x612&w=0&k=20&c=Sc3auzDoYX7wt01KphLYfWqIvtRpyzfjvAB6PPZRK0U=)]">
-      <ClubNavbar/>
-      <ChatRoom/>
-    </div>
+    <div className="pt-4  m-1 pb-4 bg-cover text-white min-h-screen bg-gray-800">
+      {role==='admin'?<ClubNavbar/>:<ClubUserNavbar/>}
+      {/* <ClubUserNavbar/> */}
+      <Suspense fallback={<div className='flex justify-center items-center h-screen bg-gray-900 bg-opacity-60'><div className='text-white font-bold text-xl text-center'>Loading...</div></div>}>
+      <LazyChatRoom />
+    </Suspense>
+    </div> 
     </>
   )
 }

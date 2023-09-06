@@ -25,6 +25,7 @@ function ClubGallery() {
         getGallery()
     } catch (error) {
         console.log(error)
+        navigate('/error')
     }
     
   },[state])

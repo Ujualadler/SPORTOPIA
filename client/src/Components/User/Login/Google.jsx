@@ -19,7 +19,6 @@ function Google() {
           console.log(credentialResponse);
           const { credential } = credentialResponse;
           const payload = credential ? decodeJwt(credential) : undefined;
-          console.log(payload.email,'===========================');
           if (payload) {
             userAxios
               .post("/googlelogin", 
@@ -37,6 +36,7 @@ function Google() {
               })
               .catch((err) => {
                 console.log(err);
+                navigate('/error')
               });
           }
         }}

@@ -50,15 +50,16 @@ export default function TurfLoginPage() {
     } catch (error) {
       generateError("An error occurred. Please try again.");
       console.error(error);
+      navigate('/turf/error')
     }
   };
 
   return (
     <>
-      <div className="flex h-screen  flex-1 bg-gray-900 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex h-screen  flex-1 bg-black flex-col justify-center px-6 py-12 lg:px-8">
         <Toaster position="bottom-center" reverseOrder={false} />
-        <div className="bg-white md:m-24 rounded-lg space-y-9 border border-gray-900 " >
-          <div className="bg-white m-5 rounded-2xl border border-black-8">
+        <div className="bg-white md:m-96 rounded-lg space-y-9 border border-gray-900 " >
+          <div className="bg-white m-5 rounded-2xl ">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-10 w-auto mt-2"
@@ -136,8 +137,17 @@ export default function TurfLoginPage() {
             </div>
           </form>
           <TurfGoogle/>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
+                
+          <p className="mt-2 text-center text-sm text-gray-500">
+            Otp login?{" "}
+            <a
+              href="#"
+              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            >
+              <Link to="/turf/otpLogin">Click here</Link>
+            </a>
+          </p>  
+          <p className="mt-1 text-center text-sm text-gray-500">
             Not a member?{" "}
             <a
               href="#"

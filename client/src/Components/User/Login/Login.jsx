@@ -10,6 +10,7 @@ export default function Login() {
   const userAxios = UserAxios();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [forgott, setForgott] = useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -49,15 +50,29 @@ export default function Login() {
         generateError(result.message);
       }
     } catch (error) {
-      generateError("An error occurred. Please try again.");
+      navigate('/error')
       console.error(error);
     }
   };
 
+  const forgotPassword = () => {
+    if(email.trim().length==0){
+      toast.error('Enter email')
+    }else{
+      userAxios.post('/forgottPassword', { email }).then((res) => {
+        toast.success(res.data.messasge)
+      }).catch((error) => {
+        if (error.response.data.errMsg) {
+          toast.error(error.response.data.errMsg)
+        }
+      })
+    }
+  }
+
   return (
     <>
       <div className="bg-black h-screen ">
-        <div className="py-36 md:py-11">
+        <div className=" md:py-8">
           <form className="" onSubmit={LoginSubmit}>
             <div className="flex md:bg-none  md:bg-opacity-25 bg-cover bg-center bg-[url('https://wallpaperaccess.com/full/1768022.jpg')] md:border border-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
               <div
@@ -78,7 +93,7 @@ export default function Login() {
                 <p className="text-xl text-gray-100 text-center">
                   Welcome back!
                 </p>
-                <div className="mb-5">
+                <div className="mb-5 flex justify-center items-center">
                   <Google />
                 </div>
                 <div className="mt-4 flex items-center justify-between">
@@ -126,6 +141,11 @@ export default function Login() {
                   </a>
                   <span className="border-b w-1/5 md:w-1/4"></span>
                 </div>
+                <div className='flex justify-center'>
+              <p className="no-underline border-b mt-1 text-xs text-blue-700 border-blue text-blue cursor-pointer" onClick={() => navigate('/forgotPassword')}>
+                FORGOT PASSWORD?
+              </p>.
+            </div>
               </div>
             </div>
           </form>

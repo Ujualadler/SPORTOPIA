@@ -63,6 +63,7 @@ const TurfBooking = () => {
       })
       .catch((err) => {
         console.log(err);
+        navigate('/error')
       });
   }, []);
 
@@ -104,6 +105,7 @@ const TurfBooking = () => {
         setReviewData(review)
       } catch (error) {
         console.log(error);
+        navigate('/error')
       }
     };
     fetchReviews();
@@ -179,7 +181,7 @@ const TurfBooking = () => {
 
       console.log(response);
     } catch (error) {
-      console.error("Error handling payment:", error);
+      navigate('/error')
       toast.error("Payment failed. Please try again.");
     }
   };
@@ -201,7 +203,7 @@ const TurfBooking = () => {
 		  console.log(userLongitude+'bn')
         },
         (error) => {
-          console.error("Error getting user's location:", error);
+          navigate('/error')
 	       toast.error('Please allow location permission')
 
         }
@@ -231,7 +233,6 @@ const TurfBooking = () => {
 
       socket.on("message", (receivedClubId, onBooking) => {
         if (receivedClubId === id) {
-          console.log('==================',onBooking)
           setOnBooking([onBooking])
         }
       });
@@ -248,12 +249,10 @@ const TurfBooking = () => {
       setMapView(false);
     }
   };
-  console.log(userLatitude)
-  console.log(userLongitude)
+ 
 
   return (
     <section className="overflow-hidden  font-poppins   m-1 ">
-      {console.log(onBooking, '-------------------------------')}
       <div className="  ml-3 mr-3 mt-7 ">
 		<Toaster></Toaster>
         <div className="flex justify-between  ">
@@ -497,7 +496,7 @@ const TurfBooking = () => {
                                 }
                               }}
                             />
-                            <label>{`${convertTo12HourFormat(
+                            <label className="text-sm md:text-lg">{`${convertTo12HourFormat(
                               slot.start
                             )} to ${convertTo12HourFormat(slot.end)}`}</label>
                           </div>

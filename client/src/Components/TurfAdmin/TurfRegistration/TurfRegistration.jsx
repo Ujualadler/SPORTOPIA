@@ -159,11 +159,6 @@ function TurfRegistration() {
       return;
     }
 
-    // if (total < advance) {
-    //   generateError("Advance amount should be less than the total amount");
-    //   return;
-    // }
-
     try {
 
       const address = `${street}, ${city}, ${state}, ${pin}`;
@@ -199,7 +194,7 @@ function TurfRegistration() {
         generateError(response.data.error);
       }
     } catch (error) {
-      generateError("An error occurred. Please try again.");
+      navigate('/turf/error')
       console.error(error);
     }
   };

@@ -3,16 +3,13 @@ const jwt = require("jsonwebtoken");
 const authToken = require("../middleware/auth");
 const userModel = require("../models/userSchema");
 const nodemailer = require("nodemailer");
-const { trusted } = require("mongoose");
 const auth = require("../middleware/auth");
-
+const dotenv = require("dotenv").config();
 
 // user email sending
 
 const sendVerifyMail = async (name, email, user_id, check) => {
-  
   try {
-    console.log(user_id + "sdfghjkl;");
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
@@ -20,7 +17,7 @@ const sendVerifyMail = async (name, email, user_id, check) => {
       requireTLS: true,
       auth: {
         user: "sportopia2000@gmail.com",
-        pass: "xaypczevuzopytbt",
+        pass: process.env.EMAIL_PASSKEY,
       },
     });
     if (check === true) {
@@ -53,7 +50,41 @@ const sendVerifyMail = async (name, email, user_id, check) => {
       });
     }
   } catch (error) {
-    console.log(error + "haaai");
+    console.log(error);
+  }
+};
+
+// forgotpassword mail
+
+const sendForgotPasswordMail = async (email, name, userId) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "sportopia2000@gmail.com",
+        pass: process.env.EMAIL_PASSKEY,
+      },
+    });
+
+    const mailOption = {
+      from: "sportopia2000@gmail.com",
+      to: email,
+      subject: "Forgott password",
+      html: `<p>Hii ${name} please click <a href="http://localhost:5173/resetPassword/${userId}">here</a> if you wan't to reset password your email.</p>`,
+    };
+
+    transporter.sendMail(mailOption, (error, info) => {
+      if (error) {
+        console.log("Email could not be sent", error.message);
+      } else {
+        console.log("Email has been sent:", info.response);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    console.log("Error occurred while sending email");
   }
 };
 
@@ -62,7 +93,6 @@ const sendVerifyMail = async (name, email, user_id, check) => {
 const verifyMail = async (req, res) => {
   try {
     let id = req.body.user_id;
-
     const updateInfo = await userModel.updateOne(
       { _id: id },
       { $set: { isVerified: 1 } }
@@ -78,7 +108,6 @@ const verifyMail = async (req, res) => {
 const signUp = async (req, res, next) => {
   try {
     let userdetails = req.body;
-    console.log(userdetails)
     const user = await userModel.find({ email: userdetails.email });
     if (user.length === 0) {
       userdetails.password = await bcrypt.hash(userdetails.password, 10);
@@ -145,7 +174,7 @@ const login = async (req, res, next) => {
             userSignUp.token = token;
             userSignUp.name = findUser.name;
 
-            res.json({ userSignUp,userData:findUser});
+            res.json({ userSignUp, userData: findUser });
           } else {
             userSignUp.message = "Wrong Password";
             userSignUp.Status = false;
@@ -154,7 +183,7 @@ const login = async (req, res, next) => {
         } else {
           userSignUp.message = "You are blocked by admin";
           userSignUp.Status = false;
-          res.json({ userSignUp});
+          res.json({ userSignUp });
         }
       } else {
         userSignUp.message = "Verify your email first";
@@ -168,6 +197,39 @@ const login = async (req, res, next) => {
     }
   } catch (error) {
     res.json({ status: "failed", message: error.message });
+  }
+};
+
+// forgot password
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await userModel.findOne({ email });
+    if (user) {
+      sendForgotPasswordMail(email, user.name, user._id);
+      res.status(200).json({ message: true });
+    } else {
+      res.status(400).json({ errMsg: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ errMsg: "Server Error" });
+  }
+};
+
+// reset password
+
+const resetPassword = async (req, res) => {
+  try {
+    const { userId, password } = req.body;
+    let newPassword = await bcrypt.hash(password, 10);
+    await userModel.updateOne(
+      { _id: userId },
+      { $set: { password: newPassword } }
+    );
+    res.status(200).json({ message: "Password changed" });
+  } catch (error) {
+    res.status(500).json({ errMsg: "Server Error" });
   }
 };
 
@@ -292,9 +354,7 @@ const editProfile = async (req, res, next) => {
   }
 };
 
-
 // add review of a turf
-
 
 module.exports = {
   signUp,
@@ -306,4 +366,6 @@ module.exports = {
   getUserDetail,
   editProfile,
   otpLogin,
+  forgotPassword,
+  resetPassword,
 };

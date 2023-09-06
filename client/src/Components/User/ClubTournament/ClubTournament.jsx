@@ -18,7 +18,7 @@ function ClubTournament() {
             setTournamentData(res.data.result)
         }
       } catch (error) {
-
+        navigate('/error')
       }
     };
 
@@ -31,8 +31,13 @@ function ClubTournament() {
     return date.toLocaleDateString('en-US', options);
   }
 
-  const viewTournament=(id)=>{
-    navigate(`/viewTournament/${id}`)
+  const viewTournament=(id,role)=>{
+    navigate(`/viewTournament/${id}/${role}`)
+  }
+
+  
+  const tournaments=(role)=>{
+    navigate(`/yourTournaments/${role}`)
   }
 
   return (
@@ -55,7 +60,7 @@ function ClubTournament() {
             <p className="mb-1">JOINED TOURNAMENTS</p> 
           </div>
           <div
-            onClick={() => navigate("/yourTournaments")}
+            onClick={()=>tournaments('admin')}
             className="hover:bg-gray-900 m-1"
           >
             YOUR TOURNAMENTS
@@ -95,7 +100,7 @@ function ClubTournament() {
               <div className="my-auto">
                <button
                   onClick={() => {
-                    viewTournament(result?._id);
+                    viewTournament(result?._id,'admin');
                   }}
                   className="bg-black w-[7rem] mb-3 h-[2rem] hover:bg-slate-700 rounded-md text-white md:font-bold "
                 >

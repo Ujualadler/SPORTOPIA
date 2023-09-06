@@ -12,6 +12,8 @@ function VerifyMail() {
             if(res.data.status===true){
                 console.log("success")
             }
+        }).catch((err)=>{
+          navigate('/error')
         })
     },[])
 

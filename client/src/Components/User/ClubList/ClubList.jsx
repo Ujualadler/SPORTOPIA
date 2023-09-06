@@ -21,6 +21,7 @@ function ClubList() {
       }
     } catch (error) {
       console.log(error);
+      navigate('/error')
     }
   };
 
@@ -33,6 +34,7 @@ function ClubList() {
       })
       .catch((err) => {
         console.log(err);
+        navigate('/error')
       });
   }, [status]);
   return (

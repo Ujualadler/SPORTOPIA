@@ -94,9 +94,9 @@ const turfBlock = async (req, res) => {
       await turfModel.updateOne({ _id: id }, { $set: { isTurfBlocked: true } });
     }
     let resend = await turfModel.find({});
-    res.json({ result: resend, message: "success" });
+    res.status(200).json({ result: resend, message: "success" });
   } catch (error) {
-    res.json({ status: "failed", message: error.message });
+    res.status(500).json({ status: "failed", message: error.message });
   }
 };
 
@@ -120,10 +120,8 @@ const BannerAdd = async (req, res) => {
       const savedBanner = await newBanner.save();
       res.status(200).json({ status: true, banner: savedBanner });
     }
-
-    console.log(img, file);
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ status: "failed", message: error.message });
   }
 };
 
@@ -132,7 +130,7 @@ const getBanner = async (req, res) => {
     const data = await bannerModel.find().sort({ _id: -1 });
     res.status(200).json({ banner: data});
   } catch (error) {
-
+    res.status(500).json({ status: "failed", message: error.message });
   }
 };
 

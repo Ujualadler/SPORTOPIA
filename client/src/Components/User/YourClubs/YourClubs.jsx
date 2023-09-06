@@ -1,8 +1,7 @@
 import React from "react";
 import Useraxios from "../../../Axios/userAxios";
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { toast, Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 
 function YourClubs() {
@@ -28,13 +27,13 @@ function YourClubs() {
       })
       .catch((err) => {
         console.log(err);
+        navigate('/error')
       })
       .finally(() => {
         setLoading(false); // Set loading to false after the API call completes
       });
   }, []);
 
-  console.log(status);
   return (
     <>
       <div className="flex justify-center md:justify-between">

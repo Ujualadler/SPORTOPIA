@@ -11,7 +11,6 @@ import VerifyMail from "../Components/User/VerifyMail/VerifyMail";
 import EditProfile from "../Pages/User/EditProfile";
 import TurfBookingPage from "../Pages/User/TurfBookingPage";
 import PaySuccess from "../Components/User/Checkout/PaySuccess";
-import PayFail from "../Components/User/Checkout/PayFail";
 import BookingHistoryPage from "../Pages/User/BookingHistoryPage";
 import CreateClubPage from "../Pages/User/CreateClubPage";
 import ClubListPage from "../Pages/User/ClubListPage";
@@ -30,6 +29,11 @@ import JoinedTournamentsPage from "../Pages/User/JoinedTournamentsPage";
 import YourTournamentsPage from "../Pages/User/YourTournamentsPage";
 import NotFound from "../Components/Error/NotFound";
 import EditTournamentPage from "../Pages/User/EditTournamentPage";
+import ForgotPassword from "../Components/User/Login/ForgotPassword";
+import ResetPassword from "../Components/User/ResetPassword/ResetPassword";
+import AddFixture from "../Components/User/ViewTournament/AddFixture";
+import ViewFixture from "../Components/User/ViewTournament/ViewFixture";
+import Error from "../Components/Error/Error";
 
 
 function UserRoute() {
@@ -40,6 +44,8 @@ function UserRoute() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={userToken ? <HomePage/> : <Login />}/>
+        <Route path="/forgotPassword" element={<ForgotPassword/>}/>
+        <Route path="/resetPassword/:userId" element={<ResetPassword/>}/>
         <Route path="/otpLogin" element={userToken ? <OtpLogin /> : <OtpLogin/>}/>
         <Route path="/signup" element={userToken ? <HomePage /> : <SignUp />}/>
         <Route path="/profile" element={userToken ? <Profile /> : <Login />}/>
@@ -48,7 +54,6 @@ function UserRoute() {
         <Route path="/editProfile" element={<EditProfile />} />
         <Route path="/booking/:id" element={userToken?<TurfBookingPage />:<Login/>}/>
         <Route path="/paymentSuccess" element={userToken?<PaySuccess />:<Login/>}/>
-        <Route path="/paymentFail" element={<PayFail />}/>
         <Route path="/bookingHistory" element={userToken?<BookingHistoryPage/>:<Login/>}/>
         <Route path="/createClub" element={userToken?<CreateClubPage/>:<Login/>}/>
         <Route path="/clubs" element={userToken?<ClubListPage/>:<Login/>}/>
@@ -56,16 +61,19 @@ function UserRoute() {
         <Route path="/clubscreated" element={userToken?<CreatedClubsPage/>:<Login/>}/>
         <Route path="/clubHome/:id" element={userToken?<ClubHomePage />:<Login/>}/>
         <Route path="/members/:id" element={userToken?<ClubMembersPage />:<Login/>}/>
+        <Route path="/chat/:role" element={userToken?<ChatRoomPage/>:<Login/>}/>
         <Route path="/clubUserHome/:id" element={userToken?<ClubUserHomePage/>:<Login/>}/>
-        <Route path="/chat" element={userToken?<ChatRoomPage/>:<Login/>}/>
         <Route path="/clubGallery" element={userToken?<ClubGalleryPage/>:<Login/>}/>
         <Route path="/clubUserGallery" element={userToken?<ClubUserGalleryPage/>:<Login/>}/>
         <Route path="/createTournament" element={userToken?<CreateTournamentPage/>:<Login/>}/>
         <Route path="/tournaments" element={userToken?<ClubTournamentPage/>:<Login/>}/>
-        <Route path="/viewTournament/:id" element={userToken?<ViewTournamentPage/>:<Login/>}/>
+        <Route path="/viewTournament/:id/:role" element={userToken?<ViewTournamentPage/>:<Login/>}/>
         <Route path="/joinedTournaments" element={userToken?<JoinedTournamentsPage/>:<Login/>}/>
-        <Route path="/yourTournaments" element={userToken?<YourTournamentsPage/>:<Login/>}/>
+        <Route path="/yourTournaments/:role" element={userToken?<YourTournamentsPage/>:<Login/>}/>
         <Route path="/editTournament/:id" element={userToken?<EditTournamentPage/>:<Login/>}/>
+        <Route path="/addFixture/:id" element={userToken?<AddFixture/>:<Login/>}/>
+        <Route path="/viewFixture/:id" element={userToken?<ViewFixture/>:<Login/>}/>
+        <Route path="/error" element={<Error/>}/>
         <Route path='*' element={<NotFound />}/>
       </Routes>
     </>

@@ -15,23 +15,23 @@ function ClubUserHome() {
   const clubId = useSelector((state) => state.Club.clubId);
 
 
-  useEffect(() => {
-    const clubData = async () => {
-      try {
-        const response =await userAxios.post("/clubDetails",{id});
-        if (response) {
-          setClubData(response.data.data)
-          dispatch(setUserClubId({userClubId:id})); 
-          console.log(response.data+'sdghjkfghk');
+    useEffect(() => {
+      const clubData = async () => {
+        try {
+          const response =await userAxios.post("/clubDetails",{id});
+          if (response) {
+            setClubData(response.data.data)
+            dispatch(setUserClubId({userClubId:id})); 
+            console.log(response.data+'sdghjkfghk');
+          }
+        } catch (error) {
+          console.log(error);
+          navigate('/error')
         }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+      };
 
-    clubData();
-    console.log(clubId)
-  }, []);
+      clubData();
+    }, []);
 
   return (
     <>

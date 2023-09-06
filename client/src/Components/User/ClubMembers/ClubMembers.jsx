@@ -19,6 +19,7 @@ function ClubMembers() {
       })
       .catch((err) => {
         console.log(err);
+        navigate('/error')
       });
   }, [status]);
 
@@ -31,6 +32,7 @@ function ClubMembers() {
       }
     } catch (error) {
       console.log(error);
+      navigate('/error')
     }
   };
 
@@ -51,7 +53,7 @@ function ClubMembers() {
               <div className="flex items-center mb-2">
                 <img
                   className="rounded-full md:ml-8 h-28 w-28"
-                  src={data.user.image}
+                  src={data.user.image?data.user.image:'https://as1.ftcdn.net/v2/jpg/02/09/95/42/1000_F_209954204_mHCvAQBIXP7C2zRl5Fbs6MEWOEkaX3cA.jpg'}
                   alt="Profile"
                 />
                 <div className="md:ml-12 ml-4 flex flex-col"></div>

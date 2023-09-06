@@ -96,7 +96,6 @@ const joinClub = async (req, res) => {
       _id: clubId,
       users: { $elemMatch: { user: userId } },
     });
-    console.log(club);
     if (!club) {
       await clubModel.updateOne(
         { _id: clubId },
@@ -168,7 +167,6 @@ const acceptMember = async (req, res) => {
 
 const clubMembers = async (req, res) => {
   try {
-    console.log("first");
     const clubId = req.query.id;
     const data = await clubModel
       .findById({ _id: clubId })
@@ -186,7 +184,6 @@ const clubMembers = async (req, res) => {
 
 const removeMember = async (req, res) => {
   try {
-    console.log("first");
     const clubId = req.body.id;
     const userId = req.body.userId;
 
@@ -194,7 +191,6 @@ const removeMember = async (req, res) => {
       { _id: clubId },
       { $pull: { users: { user: userId } } }
     );
-    console.log(data);
     res.status(200).json({ status: "removed" });
   } catch (error) {
     res.status(500).json({ errMsg: "Server Error" });
@@ -237,7 +233,6 @@ const clubGalleryAdd = async (req, res) => {
         { $push: { gallery: galleryItem } },
         { new: true }
       );
-      console.log(updateClub.gallery);
       res.status(200).json({ status: true, gallery: updateClub.gallery });
     }
 
@@ -251,7 +246,6 @@ const getGallery = async (req, res) => {
   try {
     const clubId = req.body.clubId;
     const data = await clubModel.findOne({ _id: clubId }).sort({ _id: -1 });
-    console.log(data.gallery);
     res.status(200).json({ gallery: data.gallery });
   } catch (error) {}
 };
@@ -285,10 +279,8 @@ const removeGallery = async (req, res) => {
 
 const userClubDetails = async (req, res) => {
   try {
-    console.log("gallery");
     const clubId = req.body.clubId;
     const data = await clubModel.findOne({ _id: clubId }).sort({ _id: -1 });
-    console.log(data.gallery);
     res.status(200).json({ gallery: data.gallery });
   } catch (error) {
     res.status(500).json({

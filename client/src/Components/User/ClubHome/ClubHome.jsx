@@ -25,6 +25,7 @@ function ClubHome() {
       })
       .catch((err) => {
         console.log(err);
+        navigate('/error')
       });
   }, []);
 
@@ -46,14 +47,13 @@ function ClubHome() {
       }
     } catch (error) {
       console.log(error);
+      navigate('/error')
     }
   };
 
   const members = () => {
     navigate(`/members/${id}`);
   };
-
-  console.log(memberData);
 
   return (
     <>

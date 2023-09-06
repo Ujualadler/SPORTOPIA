@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UserAxios from "../../../Axios/userAxios";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"; 
 import { useNavigate } from "react-router-dom";
 
 const AddReview = (id) => {
@@ -12,8 +12,7 @@ const AddReview = (id) => {
   const navigate = useNavigate();
 
   const turf = id.turf;
-  console.log(turf + "ghjkl");
-
+  
   const handleReviewTextChange = (e) => {
     setReviewText(e.target.value);
   };
@@ -24,7 +23,7 @@ const AddReview = (id) => {
 
   const handleSubmitReview = async (e) => {
     e.preventDefault();
-    if (!reviewText.trim() || !rating.trim()) {
+    if (!reviewText.trim() || !rating.toString().trim()) {
       toast.error("Fill all the fields");
       return;
     }
@@ -41,6 +40,7 @@ const AddReview = (id) => {
         toast.error("Failed to submit review");
       }
     } catch (error) {
+      navigate('/error')
       console.log(error);
     }
     setReviewText("");
@@ -81,7 +81,7 @@ const AddReview = (id) => {
             type="text"
             value={reviewText}
             onChange={handleReviewTextChange}
-            className="text-base leading-normal bg-gray-700 bg-opacity-60  drop-shadow-xl text-gray-100 w-full pb-14"
+            className="text-base leading-normal p-2 bg-gray-700 bg-opacity-60  drop-shadow-xl text-gray-100 w-full pb-14"
             placeholder="Write your review here"
           />
           <div className="flex items-center mb-4 mt-3">

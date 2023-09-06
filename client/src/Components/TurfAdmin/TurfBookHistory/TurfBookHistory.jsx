@@ -11,6 +11,9 @@ const TurfBookhistory = () => {
     turfAxios.get("/TurfBookingHistory").then((response) => {
       const data = response.data.history;
       setDetails(data);
+    }).catch((err) => {
+      console.log(err);
+      navigate('/turf/error')
     });
   }, []);
 

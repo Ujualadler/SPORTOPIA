@@ -14,6 +14,8 @@ const upload=multer.createMulter()
 router.post('/signUp',userController.signUp)
 router.post('/verify',userController.verifyMail)
 router.post('/login',userController.login)
+router.post('/forgotPassword',userController.forgotPassword)
+router.post('/resetPassword',userController.resetPassword)
 router.post('/googlelogin',userController.googlelogin)
 router.get('/getTurfs',turfController.getTurfs)
 router.get('/profile',auth.verifyToken,userController.userProfile)
@@ -51,6 +53,13 @@ router.get('/getJoinedTournaments',auth.verifyToken,tournamentController.getJoin
 router.post('/joinTournament',auth.verifyToken,tournamentController.joinTournament)
 router.post('/createTournament',upload.single('detailedDocument'),auth.verifyToken,tournamentController.createTournament)
 router.post('/editTournament',upload.single('detailedDocument'),auth.verifyToken,tournamentController.editTournament)
+router.post('/addGame',auth.verifyToken,tournamentController.addGame)
+router.get('/findMatches',auth.verifyToken,tournamentController.findMatches)
+router.post('/deleteGame',auth.verifyToken,tournamentController.deleteGame)
+router.post('/editGame',auth.verifyToken,tournamentController.editGame)
+router.post('/addWinners',auth.verifyToken,tournamentController.addWinners)
+
+
 
 
 

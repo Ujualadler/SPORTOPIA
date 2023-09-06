@@ -47,7 +47,6 @@ const signUp = async (req, res, next) => {
 const verifyTurf = async (req, res) => {
   try {
     let id = req.body.user_id;
-
     const updateInfo = await turfAdminModel.updateOne(
       { _id: id },
       { $set: { isVerified: 1 } }
@@ -119,7 +118,6 @@ const login = async (req, res, next) => {
 const googlelogin = async (req, res, next) => {
   try {
     const payload = req.body;
-    console.log(payload.email);
     const user = await turfModel.findOne({ email: payload.email });
     let userSignUp = {
       Status: false,
@@ -153,6 +151,24 @@ const googlelogin = async (req, res, next) => {
     }
   } catch (err) {
     res.status(500).json({ error:err.message });
+  }
+};
+
+const otpLogin = async (req, res) => {
+  try {
+    const { phone } = req.body;
+    const user = await turfAdminModel.findOne({ contactNumber: phone });
+    if (user) {
+      const token = auth.generateAuthToken(user);
+      const data = {
+        token,
+      };
+      res.status(200).json({ data });
+    } else {
+      res.status(404).json({ errMsg: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ errMsg: "Server Error" });
   }
 };
 
@@ -220,5 +236,6 @@ module.exports = {
   googlelogin,
   turfProfile,
   getAdminDetail,
-  editProfile
+  editProfile,
+  otpLogin
 };

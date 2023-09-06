@@ -20,6 +20,7 @@ function JoinedTournaments() {
         }
       } catch (error) {
         console.log(error)
+        navigate('/error')
       }
     };
 
@@ -33,7 +34,7 @@ function JoinedTournaments() {
   }
 
   const viewTournament=(id)=>{
-    navigate(`/viewTournament/${id}`)
+    navigate(`/viewTournament/${id}/role='admin'`)
   }
 
   return (

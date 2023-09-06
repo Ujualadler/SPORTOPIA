@@ -20,6 +20,7 @@ function TurfHome() {
       getBanner();
     } catch (error) {
       console.log(error);
+      navigate('/turf/error')
     }
   }, []);
 

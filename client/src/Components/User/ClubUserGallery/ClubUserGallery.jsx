@@ -19,6 +19,7 @@ function ClubUserGallery() {
       getGallery();
     } catch (error) {
       console.log(error);
+      navigate('/error')
     }
   }, []);
 
@@ -55,7 +56,11 @@ function ClubUserGallery() {
                 </div>
               );
             })
-          : ""}
+          :<div className="flex justify-center mt-36 h-screen">
+          <div className="mt-8 mx-11 hidden md:block text-white md:text-xl font-bold tracking-wide">
+            EMPTY GALLERY
+          </div>
+        </div>}
       </div>
     </>
   );

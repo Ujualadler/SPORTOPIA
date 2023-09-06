@@ -90,6 +90,7 @@ const ProfileEdit = () => {
         }
     }).catch((err)=>{
         console.log(err)
+        navigate('/error')
     })
   };
 

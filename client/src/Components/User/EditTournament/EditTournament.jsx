@@ -10,7 +10,7 @@ const EditTournament = () => {
   const [sportsType, setSportsType] = useState("");
   const [description, setDescription] = useState("");
   const [maximumTeams, setMaximumTeams] = useState("");
-  const [detailedDocument, setDetailedDocument] = useState('');
+  const [detailedDocument, setDetailedDocument] = useState("");
   const [tournamentData, setTournamentData] = useState("");
 
   const navigate = useNavigate();
@@ -35,20 +35,19 @@ const EditTournament = () => {
         console.log(res.data.data, "response available");
         if (res.data.data) {
           setTournamentData(res.data.data);
-          setDetailedDocument(res.data.data.detailedDocument)
-          setDescription(res.data.data.description)
-          setMaximumTeams(res.data.data.maximumTeams)
-          setSportsType(res.data.data.sportsType)
-          setTournamentName(res.data.data.tournamentName)
+          setDetailedDocument(res.data.data.detailedDocument);
+          setDescription(res.data.data.description);
+          setMaximumTeams(res.data.data.maximumTeams);
+          setSportsType(res.data.data.sportsType);
+          setTournamentName(res.data.data.tournamentName);
         }
       } catch (error) {
         console.log(error);
+        navigate('/error')
       }
     };
     getData();
   }, []);
-
-
 
   const uploadFile = (event) => {
     const file = event.target.files[0];
@@ -60,10 +59,11 @@ const EditTournament = () => {
     setDetailedDocument(file);
   };
 
-
   const editTournament = async (e) => {
     e.preventDefault();
-
+    const tournaments=(role)=>{
+      navigate(`/yourTournaments/${role}`)
+    }
     const generateError = (err) => toast.error(err);
 
     if (
@@ -91,13 +91,14 @@ const EditTournament = () => {
       .then((res) => {
         if (res.data.status === "success") {
           successToast("Tournament Successfully edited");
-          navigate("/yourTournaments");
+          tournaments('admin')
         } else {
           errorToast(res.data.status);
         }
       })
       .catch((err) => {
         console.log(err);
+        navigate('/error')
       });
   };
 
@@ -113,22 +114,20 @@ const EditTournament = () => {
           <div className="w-full  flex justify-center">
             <div className="flex-col">
               <div className="mt-5 text-center">
-                <div className="pdf-container md:w-[25rem]  mb-2 ">
-                  <iframe
-                    src={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                      detailedDocument?detailedDocument:tournamentData?.detailedDocument
-                    )}&embedded=true`}
-                    title="PDF Viewer"
-                    width="100%"
-                    height="300"
-                    frameBorder="0"
-                  >
-                    <p>
-                      Your browser does not support PDF viewing. You can
-                      download the PDF{" "}
-                      <a href={detailedDocument?detailedDocument:tournamentData.detailedDocument}>here</a>.
-                    </p>
-                  </iframe>
+                <div className="pdf-container md:w-[25rem] mb-2">
+                  {detailedDocument && (
+                    <iframe
+                      src={
+                        detailedDocument instanceof File
+                          ? URL.createObjectURL(detailedDocument)
+                          : detailedDocument
+                      }
+                      title="PDF Viewer"
+                      width="100%"
+                      height="300"
+                      frameBorder="0"
+                    />
+                  )}
                 </div>
                 <button
                   type="button"
@@ -322,7 +321,7 @@ const EditTournament = () => {
                 type="submit"
                 className="rounded hover:rounded-lg bg-black w-[8.5rem] h-[2rem] hover:bg-slate-900 text-white"
               >
-                CREATE
+                EDIT
               </button>
             </div>
           </div>

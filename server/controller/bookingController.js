@@ -3,17 +3,15 @@ require("dotenv").config();
 const stripe = Stripe(process.env.STRIPE_KEY);
 const bookingModel = require("../models/bookingSchema");
 const turfModel = require("../models/turfSchema");
-const userModel = require("../models/userSchema");
+
 
 // checkout page loading 
 
 const createCheckOut = async (req, res) => {
   try {
-    console.log("first")
     const { totalAmount, totalAdvance, turfId, data, date, selectedSlots } =
       req.body;
     const details = req.body;
-    console.log(details)
     const existingBooking = await bookingModel.find({
       turf: turfId,
       bookedDate: date,
@@ -87,9 +85,7 @@ const createCheckOut = async (req, res) => {
 const paymentSuccess = async (req, res) => {
   try {
     const details = req.body;
-    console.log(details);
     const turf = await turfModel.findOne({ _id: details.turfId });
-    console.log(req.user._id)
     if (details) {
       const booking = new bookingModel({
         user: req.user._id,
@@ -113,13 +109,11 @@ const paymentSuccess = async (req, res) => {
 const bookingHistory = async (req, res) => {
   try {
     const userId = req.user._id;
-    console.log(userId);
     const history = await bookingModel
       .find({ user: userId })
       .sort({ _id: -1 })
       .populate("user")
       .populate("turf");
-    console.log(history);
     res.json({ history });
   } catch (error) {
     res.status(500).json({ error: "Failed to send bookingHistory" });

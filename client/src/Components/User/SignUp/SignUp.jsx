@@ -50,7 +50,7 @@ export default function SignUp() {
         generateError(response.data.error);
       }
     } catch (error) {
-      generateError("An error occurred. Please try again.");
+      navigate('/error')
       console.error(error);
     }
   };

@@ -5,7 +5,6 @@ import { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function TurfListing() {
-  const token = useSelector((store) => store.Turf.Token);
   const [turfData, setTurfData] = useState([]);
   const navigate=useNavigate()
   const Turfaxios=turfaxios()
@@ -21,6 +20,7 @@ function TurfListing() {
       })
       .catch((err) => {
         console.log(err);
+        navigate('/turf/error')
       });
   }, []);
   return (

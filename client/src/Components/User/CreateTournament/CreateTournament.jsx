@@ -7,15 +7,15 @@ import { useSelector } from "react-redux";
 const CreateTournament = () => {
   const clubId = useSelector((state) => state.Club.clubId);
   const [tournamentName, setTournamentName] = useState("");
-  const [sportsType, setSportsType] = useState("");
   const [description, setDescription] = useState("");
+  const [sportsType, setSportsType] = useState("");
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
   const [startingTime, setStartingTime] = useState("");
   const [endingTime, setEndingTime] = useState("");
   const [maximumTeams, setMaximumTeams] = useState("");
   const [detailedDocument, setDetailedDocument] = useState("");
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const userAxios = UserAxios();
 
@@ -43,19 +43,24 @@ const CreateTournament = () => {
     const today = new Date();
     const minStartingDate = new Date(today);
     minStartingDate.setDate(today.getDate() + 5);
-  
+
     const year = minStartingDate.getFullYear();
-    const month = String(minStartingDate.getMonth() + 1).padStart(2, '0');
-    const day = String(minStartingDate.getDate()).padStart(2, '0');
-   
+    const month = String(minStartingDate.getMonth() + 1).padStart(2, "0");
+    const day = String(minStartingDate.getDate()).padStart(2, "0");
+
     return `${year}-${month}-${day}`;
   };
 
   const createTournamnet = async (e) => {
     e.preventDefault();
 
-    const generateError = (err) => toast.error(err);
+    const tournaments = (role) => {
+      navigate(`/yourTournaments/${role}`);
+    };
 
+    
+    const generateError = (err) => toast.error(err);
+ 
     if (
       !tournamentName.trim() ||
       !sportsType.trim() ||
@@ -70,12 +75,24 @@ const CreateTournament = () => {
       generateError("Please fill in all the fields");
       return;
     }
+    if (!sportsType||sportsType ==='Select a sport') {
+      generateError("Select a sports type");
+      return;
+    }
+    if (!maximumTeams||maximumTeams ==='Select no of teams') {
+      generateError("Select no of teams");
+      return;
+    }
     const today = new Date();
     const minStartingDate = new Date();
     minStartingDate.setDate(today.getDate() + 5);
 
     if (startingDate <= minStartingDate) {
       generateError("Starting date should be at least 5 days ahead of today");
+      return;
+    }
+    if (selectedSport ==='Select a sport') {
+      generateError("Select a sports type");
       return;
     }
     if (startingDate > endingDate) {
@@ -111,14 +128,40 @@ const CreateTournament = () => {
       .then((res) => {
         if (res.data.status === "success") {
           successToast("Tournament Successfully Created");
-          navigate('/yourTournaments')
+          tournaments("admin");
         } else {
           errorToast(res.data.status);
         }
       })
       .catch((err) => {
         console.log(err);
+        navigate('/error')
       });
+  }; 
+
+  const sports = [
+    { value: "football", label: "FOOTBALL" },
+    { value: "cricket", label: "CRICKET" },
+    { value: "badminton", label: "BADMINTON" },
+    { value: "basketball", label: "BASKETBALL" },
+    { value: "hockey", label: "HOCKEY" },
+    { value: "others", label: "OTHERS" }
+  ];
+
+  const noOfTeams = [
+    { value: "football", label: "2" },
+    { value: "cricket", label: "4" },
+    { value: "badminton", label: "8" },
+    { value: "basketball", label: "16" },
+    { value: "hockey", label: "32" },
+  ];
+
+  const handleSportChange = (event) => {
+    setSportsType(event.target.value);
+  };
+
+  const handleTeamChange = (event) => {
+    setMaximumTeams(event.target.value);
   };
 
   return (
@@ -130,7 +173,21 @@ const CreateTournament = () => {
               CREATE A TOURNAMENT
             </span>
           </div>
-          <div className="w-full p-8 mx-2 flex justify-center">
+
+          <div className="w-full p-8 mx-2">
+            <div className="pdf-container md:w-[25rem] mb-2">
+              {detailedDocument && (
+                <iframe
+                  src={URL.createObjectURL(
+                    detailedDocument ? detailedDocument : ""
+                  )}
+                  title="PDF Viewer"
+                  width="100%"
+                  height="300"
+                  frameBorder="0"
+                />
+              )}
+            </div>
             <div className="flex-col">
               <div className="mt-5 text-center">
                 <button
@@ -175,24 +232,27 @@ const CreateTournament = () => {
                 />
               </div>
             </div>
-            <div className="pb-2">
+            <div className="mb-2">
               <label
-                htmlFor="name"
-                className="font-semibold text-gray-200 block pb-1"
+                htmlFor="sports"
+                className="block font-semibold text-gray-200"
               >
-                Sports type
+                Select a sport:
               </label>
-              <div className="flex">
-                <input
-                  id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full"
-                  type="text"
-                  placeholder="Enter sports type"
-                  onChange={(e) => {
-                    setSportsType(e.target.value);
-                  }}
-                />
-              </div>
+              <select
+                id="sports"
+                name="sports"
+                value={sportsType}
+                onChange={handleSportChange}
+                className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-r shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-300"
+              >
+                {sportsType === "" && <option value="">Select a sport</option>}
+                {sports.map((sport) => (
+                  <option className="h-28" key={sport.value} value={sport.value}>
+                    {sport.label}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="pb-2">
@@ -214,24 +274,27 @@ const CreateTournament = () => {
                 />
               </div>
             </div>
-            <div className="pb-2">
+            <div className="mb-2">
               <label
-                htmlFor="name"
-                className="font-semibold text-gray-200 block pb-1"
+                htmlFor="sports"
+                className="block font-semibold text-gray-200"
               >
-                Maximum number of teams
+                Select no of teams:
               </label>
-              <div className="flex">
-                <input
-                  id="username"
-                  className="border border-gray-400 rounded-r px-4 py-2 w-full  break-word"
-                  type="number"
-                  placeholder="Enter maximum no of teams allowed"
-                  onChange={(e) => {
-                    setMaximumTeams(e.target.value);
-                  }}
-                />
-              </div>
+              <select
+                id="sports"
+                name="sports"
+                value={maximumTeams}
+                onChange={handleTeamChange}
+                className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-r shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-300"
+              >
+                {maximumTeams === "" && <option value="">Select no of teams</option>}
+                {noOfTeams.map((sport) => (
+                  <option className="h-28" key={sport.value} value={sport.value}>
+                    {sport.label}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="pb-2">
               <label

@@ -119,6 +119,7 @@ const ClubCreation = () => {
       })
       .catch((err) => {
         console.log(err);
+        navigate('/error')
       });
   };
 

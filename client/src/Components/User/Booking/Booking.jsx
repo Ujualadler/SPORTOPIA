@@ -24,6 +24,7 @@ function Booking() {
         setTurfData(response.data.result);
       })
       .catch((err) => {
+        navigate('/error')
         console.log(err);
       });
   }, []);
@@ -45,6 +46,7 @@ function Booking() {
       const response = await axios.get(endpoint, { params });
       return response.data.features;
     } catch (error) {
+      navigate('/error')
       console.error("Error fetching location suggestions:", error);
       return [];
     }
@@ -154,11 +156,10 @@ function Booking() {
         </div>
       </div>
       <div className="  pt-4 pb-4 mt-2">
-        {console.log(nearbyTurfs,'=========')}
         {nearbyTurfs.length>0?nearbyTurfs.map((result) => (
           <div
             key={result._id}
-            className="container flex flex-col items-center md:flex-row md:justify-around  mt-7 md:ml-auto bg-gray-900 bg-opacity-60 md:mr-auto rounded-md mb-7 relative shadow-2xl"
+            className="container flex flex-col items-center md:flex-row md:justify-around border border-black mt-7 md:ml-auto bg-gray-900 bg-opacity-60 md:mr-auto rounded-md mb-7 relative shadow-2xl"
           >
             <div className="mb-auto md:mt-auto mt-3 flex ">
               <div className="bg-gradient-to-r from-gray-800 to-gray-600 w-[10rem] h-[10rem] m-auto flex justify-center">

@@ -8,7 +8,6 @@ const userModel = require("../models/userSchema");
 const addReview=async(req,res)=>{
     try {
         const userId=req.user._id
-        console.log(userId)
         const data=req.body
         const sameTurf=await reviewModel.findOne({turf:data.turf}).populate('turf')
         if(!sameTurf){
@@ -27,7 +26,6 @@ const getReview=async(req,res)=>{
 try {
 
     const turfId=req.query.id
-    console.log(turfId)
 
     const reviews=await reviewModel.find({turf:turfId}).populate('turf').populate('user')
 
@@ -37,11 +35,10 @@ try {
         return(a+b)
     })
     const totalRating=rating/reviews.length
-    console.log(totalRating)
     res.status(200).json({reviews,totalRating})
 
 } catch (error) {
-    
+    res.status(500).json('server error')
 }
 }
 module.exports={

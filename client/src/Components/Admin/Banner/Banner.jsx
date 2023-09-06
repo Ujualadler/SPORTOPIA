@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import AdminAxios from "../../../Axios/adminAxios";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
@@ -67,7 +66,6 @@ function Banner() {
 
   const removeBanner = async (id) => {
     try {
-      console.log(id);
       const response = await adminAxios.post('/removeBanner',{id});
       Swal.fire({
         title:"Are you sure?",

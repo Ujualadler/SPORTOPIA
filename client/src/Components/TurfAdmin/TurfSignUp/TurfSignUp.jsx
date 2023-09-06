@@ -47,7 +47,7 @@ export default function TurfSignUp() {
         generateError(response.data.error);
       }
     } catch (error) {
-      generateError("An error occurred. Please try again.");
+      navigate('/turf/error')
       console.error(error);
     }
   };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Useraxios from "../../../Axios/userAxios";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 function YourTournaments() {
@@ -9,17 +9,18 @@ function YourTournaments() {
   const navigate = useNavigate();
   const[tournamentData,setTournamentData]=useState('')
   const clubId = useSelector((state) => state.Club.clubId);
+  const {role}=useParams()
 
   useEffect(() => {
     const getData = async (req, res) => {
       try {
         const res = await userAxios.get(`/getYourTournaments?id=${clubId}`);
         if (res) {
-          console.log(res.data.result);
           setTournamentData(res.data.result);
         }
       } catch (error) {
         console.log(error)
+        navigate('/error')
       }
     };
 
@@ -33,7 +34,7 @@ function YourTournaments() {
   }
 
   const viewTournament=(id)=>{
-    navigate(`/viewTournament/${id}`)
+    navigate(`/viewTournament/${id}/${role}`)
   }
 
   const editTournament=(id)=>{
@@ -88,14 +89,15 @@ function YourTournaments() {
                 >
                   VIEW
                 </button>
-                <button
+                {role==='admin'?                <button
                 onClick={() => {
                   editTournament(result._id);
                 }}
                 className="bg-black w-[7rem] mb-3 h-[2rem] hover:bg-slate-700 rounded-md text-white md:font-bold "
               >
                 EDIT
-              </button>
+              </button>:''}
+
               </>
                 }
               </div>
