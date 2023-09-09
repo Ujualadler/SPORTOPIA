@@ -3,7 +3,7 @@ import UserAxios from "../../../Axios/userAxios";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-
+import { ClipLoader } from "react-spinners";
 
 function ClubGallery() {
   const userAxios = UserAxios();
@@ -11,24 +11,27 @@ function ClubGallery() {
   const [content, setContent] = useState(null);
   const [file, setFile] = useState("");
   const [state, setState] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [gallery, setGallery] = useState("");
   const img = useRef();
 
-  useEffect(()=>{
+  useEffect(() => {
+    setLoading(true);
+
     try {
-        const getGallery=async()=>{
-            const response=await userAxios.post('getGallery',{clubId})
-            if(response){
-                setGallery(response.data.gallery)
-            }
+      const getGallery = async () => {
+        const response = await userAxios.post("getGallery", { clubId });
+        if (response) {
+          setGallery(response?.data?.gallery);
+          setLoading(false);
         }
-        getGallery()
+      };
+      getGallery();
     } catch (error) {
-        console.log(error)
-        navigate('/error')
+      console.log(error);
+      navigate("/error");
     }
-    
-  },[state])
+  }, [state]);
 
   const changeimg = (event) => {
     const file = event.target.files[0];
@@ -46,7 +49,6 @@ function ClubGallery() {
       toast.error("Please provide both description and an image file.");
       return;
     }
-    
     try {
       const response = await userAxios.post(
         "/clubGalleryAdd",
@@ -55,10 +57,7 @@ function ClubGallery() {
       );
       if (response.data.status === true) {
         toast.success("Saved Successfully");
-        console.log(response.data.gallery+'data')
         setGallery(response.data.gallery);
-        setFile('')
-        setContent(null)
         setState(true)
       }
     } catch (error) {
@@ -68,42 +67,39 @@ function ClubGallery() {
 
   const removeGallery = async (id) => {
     try {
-      console.log(id);
-      const response = await userAxios.post('/removeGallery',{clubId,id});
+      const response = await userAxios.post("/removeGallery", { clubId, id });
       Swal.fire({
-        title:"Are you sure?",
-        text:"Do you want to remove this!",
+        title: "Are you sure?",
+        text: "Do you want to remove this!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText:"REMOVE",
-    }).then((result) => {
-        if (result.isConfirmed==true) {
-            Swal.fire("Successfully removed");
-            setGallery(response.data.gallery)
+        confirmButtonText: "REMOVE",
+      }).then((result) => {
+        if (result.isConfirmed == true) {
+          Swal.fire("Successfully removed");
+          setGallery(response.data.gallery);
+          setState(true)
         }
-    });
-    
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(gallery+'gallery')
-
   return (
     <>
-      <div className="flex justify-center md:justify-start m-5 gap-12">
+      <div className="flex justify-center md:justify-start m-4 ">
         <h2 className="text-xl font-bold text-gray-200 lg:text-2xl">
           CLUB GALLERY
         </h2>
       </div>
       <form
         onSubmit={uploadGallery}
-        className="bg-gray-900 m-2 p-2 bg-opacity-60  grid grid-cols-1 md:grid-cols-3 gap-4"
+        className="bg-gray-900 m-2 p-2 bg-opacity-60  grid grid-cols-1 md:grid-cols-3 sm:gap-4"
       >
-        <div className="mx-auto w-full px-4 md:px-8  col-span-1">
+        <div className="mx-auto w-full  col-span-1">
           <div className="col-span-1 md:col-span-1/3">
             {/* image - start */}
             <a
@@ -139,33 +135,47 @@ function ClubGallery() {
             />
           </div>
           <div className="mt-2 ">
-            <button className="w-full h-12 bg-black hover:bg-white hover:text-black font-bold rounded-md md:w-[99%]">
+            <button className="w-full h-12 bg-black text-white hover:bg-white hover:text-black font-bold rounded-md md:w-[99%]">
               SAVE
             </button>
           </div>
         </div>
-        <div className="col-span-2 gallery overflow-scroll h-[360px]">
-        {gallery.length
-          ? gallery.map((data) => (
-              <div key={data._id} className="bg-black bg-opacity-60 w-100 h-28 flex justify-between p-2 rounded-xl mb-2">
+        <div className="col-span-2 mt-4 sm:mt-0 gallery overflow-scroll h-[360px]">
+          {loading ? (
+            <div className="flex justify-center mt-40 h-80">
+              <ClipLoader color="#ffffff" loading={loading} size={150} />
+            </div>
+          ) : gallery.length ? (
+            gallery?.map((data) => (
+              <div
+                key={data._id}
+                className="bg-black bg-opacity-60 w-100  md:28 h-18 flex justify-between p-2 rounded-xl mb-2"
+              >
                 <img
-                  src={data.image} // Use the actual image URL from the data
+                  src={data?.image} // Use the actual image URL from the data
                   loading="lazy"
                   alt="Photo by Minh Pham"
-                  className="w-24 h-24"
+                  className="sm:w-24 sm:h-24 w-16 h-16"
                 />
-                <p className="text-white pl-2">{data.content}</p>
-                <button  key={data._id} onClick={()=>removeGallery(data._id)} type="submit" className="w-32 ml-2 bg-black p-2 hover:bg-gray-900">
+                <div className="flex justify-center items-center">
+                  <p className="text-white pl-2">{data?.content}</p>
+                </div>
+                <button
+                  key={data?._id}
+                  onClick={() => removeGallery(data._id)}
+                  type="submit"
+                  className="sm:w-32 w-18 ml-2 bg-black p-2 text-white hover:bg-gray-900"
+                >
                   REMOVE
                 </button>
               </div>
             ))
-          :(
+          ) : (
             <div className="flex justify-center mt-36 h-screen">
-              <div className="text-xl font-bold">EMPTY GALLERY</div>
+              <div className="text-xl text-white font-bold">EMPTY GALLERY</div>
             </div>
           )}
-          </div>
+        </div>
       </form>
     </>
   );

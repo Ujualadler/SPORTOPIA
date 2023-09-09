@@ -57,8 +57,8 @@ export default function SignUp() {
 
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 login-signup">
-        <div className="bg-gray-800 rounded-2xl p-16">
+      <div className="flex min-h-full flex-1 flex-col justify-center md:px-4 md:py-12 lg:px-8 login-signup">
+        <div className="bg-gray-800 md:rounded-2xl p-14 text-white">
           {" "}
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <img
@@ -80,7 +80,7 @@ export default function SignUp() {
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium leading-6 text-black"
+                  className="block text-sm font-medium leading-6 text-white"
                 >
                   Name
                 </label>
@@ -92,14 +92,14 @@ export default function SignUp() {
                     autoComplete="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full p-2  rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-medium leading-6 text-black"
+                  className="block text-sm font-medium leading-6 text-white"
                 >
                   Contact number
                 </label>
@@ -111,14 +111,14 @@ export default function SignUp() {
                     autoComplete="phone"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 p-2 text-black py-1.5 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-black"
+                  className="block text-sm font-medium leading-6 text-white"
                 >
                   Email address
                 </label>
@@ -130,7 +130,7 @@ export default function SignUp() {
                     autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full p-2 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -139,15 +139,10 @@ export default function SignUp() {
                 <div className="flex items-center justify-between">
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium leading-6 text-black"
+                    className="block text-sm font-medium leading-6 text-white"
                   >
                     Password
                   </label>
-                  {/* <div className="text-sm">
-                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
-                    </a>
-                  </div> */}
                 </div>
                 <div className="mt-2">
                   <input
@@ -157,7 +152,7 @@ export default function SignUp() {
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full p-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>

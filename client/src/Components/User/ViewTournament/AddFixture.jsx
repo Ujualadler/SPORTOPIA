@@ -79,7 +79,6 @@ function AddFixture() {
     fetchData();
   }, [change]);
 
-
   return (
     <div className=" bg-gray-800  m-1 min-h-screen ">
       {show ? (
@@ -115,9 +114,9 @@ function AddFixture() {
               </div>
 
               <div className="col-span-12 grid grid-cols-12 m-2 bg-black bg-opacity-40 ">
-                <div className="flex flex-col col-span-5 m-2">
+                <div className="flex flex-col sm:col-span-5 col-span-6 m-2">
                   <select
-                    className="m-1 p-3 text-center rounded-sm"
+                    className="md:m-1 p-2 text-sm sm:text-base text-center w-full rounded-sm"
                     onChange={(e) => setTeamOne(e.target.value)}
                     defaultValue={teamOne}
                   >
@@ -126,54 +125,62 @@ function AddFixture() {
                       ? clubs
                           .filter((club) => club._id !== teamTwo)
                           .map((club) => (
-                            <option key={club.id} value={club._id}>
-                              {club.clubName}
+                            <option key={club?.id} value={club?._id}>
+                              {club?.clubName}
                             </option>
                           ))
                       : ""}
                   </select>
-
-                  <label className="text-white text ml-2" htmlFor="dateInput">
-                    DATE
-                  </label>
-                  <input
-                    min={
-                      tournament ? tournament.startingDate.split("T")[0] : ""
-                    }
-                    max={tournament ? tournament.endingDate.split("T")[0] : ""}
-                    defaultValue={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="m-1 p-1 text-center"
-                    type="date"
-                    id="dateInput"
-                  />
+                  <div className="flex text-sm sm:text-base w-full flex-col">
+                    <label
+                      className="text-white ml-2 rounded-sm"
+                      htmlFor="dateInput"
+                    >
+                      DATE
+                    </label>
+                    <input
+                      min={
+                        tournament ? tournament.startingDate.split("T")[0] : ""
+                      }
+                      max={
+                        tournament ? tournament.endingDate.split("T")[0] : ""
+                      }
+                      defaultValue={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      className="sm:m-1 p-2  w-full text-center"
+                      type="date"
+                      id="dateInput"
+                    />
+                  </div>
                 </div>
-                <div className="col-span-2 flex justify-center items-center">
-                  <div className="text-white text-2xl font-extrabold">VS</div>
+                <div className="col-span-2 hidden  sm:flex justify-center items-center">
+                  <div className="text-white md:text-2xl text-xl font-extrabold">
+                    VS
+                  </div>
                 </div>
-                <div className="flex flex-col col-span-5 m-2">
+                <div className="flex flex-col sm:col-span-5 col-span-6 m-2">
                   <select
-                    className="m-1 p-3 text-center rounded-sm"
+                    className="sm:m-1 p-2 text-center text-sm sm:text-base rounded-sm"
                     onChange={(e) => setTeamTwo(e.target.value)}
                     defaultValue={teamTwo}
                   >
                     <option value="">Select a club</option>
                     {clubs.length
                       ? clubs
-                          .filter((club) => club.clubName !== teamOne)
+                          .filter((club) => club?.clubName !== teamOne)
                           .map((club) => (
-                            <option key={club.id} value={club._id}>
-                              {club.clubName}
+                            <option key={club?.id} value={club?._id}>
+                              {club?.clubName}
                             </option>
                           ))
                       : ""}
                   </select>
-                  <div className="flex flex-col md:col-span-1 col-span-2 ">
+                  <div className="flex text-sm sm:text-base w-full flex-col">
                     <label className="text-white ml-2">TIME</label>
                     <input
                       onChange={(e) => setTime(e.target.value)}
                       defaultValue={time}
-                      className="m-1 p-1 text-center  rounded-sm"
+                      className="sm:m-1 p-2 text-center w-full rounded-sm"
                       type="time"
                     />
                   </div>
@@ -194,11 +201,11 @@ function AddFixture() {
               MANAGE GAMES
             </div>
           </div>
-          <div className="overflow-x-scroll bg-black bg-opacity-20 h-[600px]">
+          <div className="overflow-x-scroll mt-1 pt-1 bg-black bg-opacity-20 h-[600px]">
             {matches.length ? (
               matches.map((match) => (
                 <MatchForm
-                  key={match._id}
+                  key={match?._id}
                   match={match}
                   clubs={clubs}
                   id={id}

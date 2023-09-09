@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Carousal from "../../Utilities/Carousal";
 import { Link } from "react-router-dom";
-import AdminAxios from "../../../Axios/adminAxios";
+import UserAxios from "../../../Axios/userAxios";
 
 function UserHome() {
   const [banner, setBanner] = useState("");
-  const adminAxios = AdminAxios();
+  const userAxios = UserAxios();
 
   useEffect(() => {
     try {
       const getBanner = async () => {
-        const response = await adminAxios.get("/getBanner");
+        const response = await userAxios.get("/getBanner");
         if (response) {
           setBanner(response.data.banner);
         }

@@ -8,8 +8,8 @@ function MatchForm({match, clubs,tournament,id,setMatches,setChange }) {
   const userAxios = UserAxios();
   const navigate=useNavigate()
   const [matchName, setMatchName] = useState(match?.matchName);
-  const [teamOne, setTeamOne] = useState(match?.teamOne._id);
-  const [teamTwo, setTeamTwo] = useState(match?.teamTwo._id);
+  const [teamOne, setTeamOne] = useState(match?.teamOne?._id);
+  const [teamTwo, setTeamTwo] = useState(match?.teamTwo?._id);
   const [scoreOne, setScoreOne] = useState(match?.scoreOne);
   const [scoreTwo, setScoreTwo] = useState(match?.scoreTwo);
   const [winner, setWinner] = useState(match?.winner);
@@ -49,11 +49,11 @@ function MatchForm({match, clubs,tournament,id,setMatches,setChange }) {
       });
   
       if (response) {
-        if (response.data.message) {
-          toast(response.data.message);
+        if (response?.data?.message) {
+          toast(response?.data?.message);
         }
-        if (response.data.status === true) {
-          setMatches(response.data.updatedTournament);
+        if (response?.data?.status === true) {
+          setMatches(response?.data?.updatedTournament);
           setChange(true);
           toast.success("GAME UPDATED SUCCESSFULLY");
         }
@@ -76,9 +76,9 @@ function MatchForm({match, clubs,tournament,id,setMatches,setChange }) {
         cancelButtonColor: "#d33",
         confirmButtonText: "REMOVE",
       }).then((result) => {
-        if (result.isConfirmed && response.data.status === true) {
+        if (result.isConfirmed && response?.data?.status === true) {
           Swal.fire("Successfully removed");
-          setMatches(response.data.updatedTournament);
+          setMatches(response?.data?.updatedTournament);
           setChange(true);
         }
       });
@@ -95,7 +95,7 @@ function MatchForm({match, clubs,tournament,id,setMatches,setChange }) {
         className=""
         onSubmit={editGame}
       >
-        <div className="grid grid-cols-12 mb-6 md:m-10 ">
+        <div className="grid grid-cols-12 mt-7  mb-10 md:m-10 ">
           <div className="text-center col-span-12">
             <input
               className="font-bold text-lg text-center rounded-md"
@@ -109,7 +109,7 @@ function MatchForm({match, clubs,tournament,id,setMatches,setChange }) {
           <div className="col-span-12 grid grid-cols-12 m-2 bg-black bg-opacity-40 ">
             <div className="flex flex-col col-span-6  lg:col-span-5 m-2">
               <select
-                className="m-1 p-3 text-center rounded-sm"
+                className="md:m-1 p-2  text-sm sm:text-base text-center rounded-sm"
                 onChange={(e) => setTeamOne(e.target.value)}
                 defaultValue={teamOne}
               >
@@ -117,25 +117,25 @@ function MatchForm({match, clubs,tournament,id,setMatches,setChange }) {
                 {clubs.length
                   ? clubs
                       .filter(
-                        (club) => club._id !== match?.teamOne?._id || teamOne
+                        (club) => club?._id !== match?.teamOne?._id || teamOne
                       )
                       .map((club) => (
-                        <option key={club.id} value={club._id}>
-                          {club.clubName}
+                        <option key={club?.id} value={club?._id}>
+                          {club?.clubName}
                         </option>
                       ))
                   : ""}
               </select>
-              <div className="flex flex-col md:col-span-1 col-span-2">
+              <div className="flex w-full   flex-col text-sm sm:text-base">
                 <label className="text-white text ml-2" htmlFor="">
                   DATE
                 </label>
                 <input
-                  min={tournament ? tournament.startingDate.split("T")[0] : ""}
-                  max={tournament ? tournament.endingDate.split("T")[0] : ""}
+                  min={tournament ? tournament?.startingDate.split("T")[0] : ""}
+                  max={tournament ? tournament?.endingDate.split("T")[0] : ""}
                   onChange={(e) => setDate(e.target.value)}
                   defaultValue={date}
-                  className="m-1 p-1 text-center "
+                  className="sm:m-1 p-2 text-center text-sm sm:text-base "
                   type="date"
                 />
               </div>
@@ -163,15 +163,15 @@ function MatchForm({match, clubs,tournament,id,setMatches,setChange }) {
               </div>
               <div className="text-md font-semibold mt-2 ">
                 <select
-                  className="m-1  py-2 outline-none text-center rounded-sm"
+                  className="m-1 text-sm sm:text-base py-2 outline-none text-center rounded-sm"
                   onChange={(e) => setWinner(e.target.value)}
                   defaultValue={winner}
                 >
                   <option value="">SELECT WINNER</option>
                   {clubs.length
                     ? clubs.map((club) => (
-                        <option key={club.id} value={club.clubName}>
-                          {club.clubName}
+                        <option key={club?.id} value={club?.clubName}>
+                          {club?.clubName}
                         </option>
                       ))
                     : ""}
@@ -180,7 +180,7 @@ function MatchForm({match, clubs,tournament,id,setMatches,setChange }) {
             </div>
             <div className="flex flex-col col-span-6  lg:col-span-5 m-2">
               <select
-                className="m-1 p-3 text-center rounded-sm"
+                className="md:m-1 p-2  text-sm sm:text-base text-center rounded-sm"
                 onChange={(e) => setTeamTwo(e.target.value)}
                 value={teamTwo}
               >
@@ -188,36 +188,36 @@ function MatchForm({match, clubs,tournament,id,setMatches,setChange }) {
                 {clubs.length
                   ? clubs
                       .filter(
-                        (club) => club._id !== match?.teamTwo?._id || teamOne
+                        (club) => club?._id !== match?.teamTwo?._id || teamOne
                       )
                       .map((club) => (
-                        <option key={club.id} value={club._id}>
-                          {club.clubName}
+                        <option key={club?.id} value={club?._id}>
+                          {club?.clubName}
                         </option>
                       ))
                   : ""}
               </select>
-              <div className="flex flex-col md:col-span-1 col-span-2 ">
+              <div className="flex text-sm sm:text-base w-full flex-col">
                 <label className="text-white ml-2" htmlFor="">
                   TIME
                 </label>
                 <input
                   onChange={(e) => setTime(e.target.value)}
                   value={time}
-                  className="m-1 p-1 text-center  rounded-sm"
+                  className="sm:m-1 p-2 text-center  rounded-sm"
                   type="time"
                 />
               </div>
             </div>
           </div>
-          <div className="col-span-12 mb-1 flex flex-col lg:hidden  justify-center items-center">
-              <div className="text-xl font-bold mb-2 text-white">SCORE</div>
+          <div className="col-span-12 mb-1 flex flex-col lg:hidden bg-gray-950 bg-opacity-70 m-2  justify-center items-center">
+              <div className="text-lg font-bold mb-2 text-white">SCORE</div>
               <div className="flex justify-center ">
                 <div>
                   <input
                     defaultValue={scoreOne}
                     onChange={(e) => setScoreOne(e.target.value)}
-                    className="w-20 h-10 p-2 text-center"
+                    className="w-[6.7rem] h-8 p-2 text-center"
                     type="text"
                   />
                 </div>
@@ -226,22 +226,22 @@ function MatchForm({match, clubs,tournament,id,setMatches,setChange }) {
                   <input
                     defaultValue={scoreTwo}
                     onChange={(e) => setScoreTwo(e.target.value)}
-                    className="w-20 h-10 p-2 text-center font-lg"
+                    className="w-[6.7rem] h-8 p-2 text-center font-lg"
                     type="text"
                   />
                 </div>
               </div>
-              <div className="text-md font-semibold mt-2 ">
+              <div className="text-md font-base">
                 <select
-                  className="m-1  py-2 outline-none text-center rounded-sm"
+                  className="m-1 text-sm sm:text-base w-[14.2rem] p-2 outline-none text-center rounded-sm"
                   onChange={(e) => setWinner(e.target.value)}
                   defaultValue={winner}
                 >
                   <option value="">SELECT WINNER</option>
                   {clubs.length
                     ? clubs.map((club) => (
-                        <option key={club.id} value={club.clubName}>
-                          {club.clubName}
+                        <option key={club?.id} value={club?.clubName}>
+                          {club?.clubName}
                         </option>
                       ))
                     : ""}
@@ -251,7 +251,7 @@ function MatchForm({match, clubs,tournament,id,setMatches,setChange }) {
           <div className="flex justify-center col-span-12">
             <button
             type="button"
-              onClick={(e) => deleteGame(match._id)}
+              onClick={(e) => deleteGame(match?._id)}
               className="font-bold mr-1 text-white text-lg text-center bg-red-900 w-[7rem] md:h-[2rem] rounded-sm"
             >
               DELETE

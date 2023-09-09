@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import UserAxios from "../../Axios/userAxios";
 import { ClipLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 
 function ChatRoom() {
@@ -33,6 +34,7 @@ function ChatRoom() {
     messagesHolder.current.addEventListener('scroll', handleScroll)
 
     return () => {
+      if(messagesHolder.current)
       messagesHolder.current.removeEventListener('scroll', handleScroll);
     };
   },[])
@@ -45,8 +47,12 @@ function ChatRoom() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3000/chat");
+    const newSocket = io("https://api.spotopia.site/chat");
     setSocket(newSocket);
+
+    newSocket.on("error",(err)=>{
+      console.log(err);
+    })
 
     return () => {
       if (newSocket) newSocket.disconnect();

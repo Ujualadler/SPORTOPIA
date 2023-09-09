@@ -1,6 +1,7 @@
 const express= require('express')
 const router=express.Router()
 const userController=require('../controller/userController')
+const adminController=require('../controller/adminController')
 const turfController=require('../controller/turfController')
 const bookingController=require('../controller/bookingController')
 const reviewController=require('../controller/reviewController')
@@ -55,9 +56,12 @@ router.post('/createTournament',upload.single('detailedDocument'),auth.verifyTok
 router.post('/editTournament',upload.single('detailedDocument'),auth.verifyToken,tournamentController.editTournament)
 router.post('/addGame',auth.verifyToken,tournamentController.addGame)
 router.get('/findMatches',auth.verifyToken,tournamentController.findMatches)
+router.get('/findWinners',auth.verifyToken,tournamentController.findWinners)
 router.post('/deleteGame',auth.verifyToken,tournamentController.deleteGame)
 router.post('/editGame',auth.verifyToken,tournamentController.editGame)
 router.post('/addWinners',auth.verifyToken,tournamentController.addWinners)
+router.post('/deleteWinners',auth.verifyToken,tournamentController.deleteWinners)
+router.get('/getBanner',adminController.getBanner)
 
 
 
